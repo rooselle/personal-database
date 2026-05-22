@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.head')
     </head>
@@ -33,14 +33,22 @@
             <flux:spacer />
 
             <flux:sidebar.nav>
-                <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                    {{ __('Repository') }}
-                </flux:sidebar.item>
-
-                <flux:sidebar.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-                    {{ __('Documentation') }}
+                <flux:sidebar.item icon="information-circle" :href="route('attributions')" :current="request()->routeIs('attributions')" wire:navigate>
+                    {{ __('Attributions') }}
                 </flux:sidebar.item>
             </flux:sidebar.nav>
+
+            <div x-data class="hidden lg:block px-2 pb-1">
+                <button
+                    type="button"
+                    x-on:click="$flux.appearance = $flux.appearance === 'dark' ? 'light' : 'dark'"
+                    class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+                >
+                    <flux:icon.sun x-show="$flux.appearance === 'dark'" class="size-5 shrink-0" />
+                    <flux:icon.moon x-show="$flux.appearance !== 'dark'" class="size-5 shrink-0" />
+                    <span x-text="$flux.appearance === 'dark' ? 'Light mode' : 'Dark mode'"></span>
+                </button>
+            </div>
 
             <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
         </flux:sidebar>
@@ -50,6 +58,9 @@
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
             <flux:spacer />
+
+            <flux:button x-data icon="sun" x-show="$flux.appearance === 'dark'" x-on:click="$flux.appearance = 'light'" variant="ghost" size="sm" />
+            <flux:button x-data icon="moon" x-show="$flux.appearance !== 'dark'" x-on:click="$flux.appearance = 'dark'" variant="ghost" size="sm" />
 
             <flux:dropdown position="top" align="end">
                 <flux:profile

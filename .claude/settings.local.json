@@ -3,7 +3,8 @@
     "allow": [
       "mcp__laravel-boost__search-docs",
       "Bash(vendor/bin/pint *)",
-      "mcp__laravel-boost__get-absolute-url"
+      "mcp__laravel-boost__get-absolute-url",
+      "Bash(php artisan *)"
     ]
   },
   "enableAllProjectMcpServers": true,

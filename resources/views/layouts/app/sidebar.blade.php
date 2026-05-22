@@ -16,6 +16,18 @@
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
+
+                <flux:sidebar.group :heading="__('My Library')" class="grid">
+                    <flux:sidebar.item icon="book-open" :href="route('books')" :current="request()->routeIs('books')" wire:navigate>
+                        {{ __('Books') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="film" :href="route('movies')" :current="request()->routeIs('movies')" wire:navigate>
+                        {{ __('Movies') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="tv" :href="route('tv-shows')" :current="request()->routeIs('tv-shows')" wire:navigate>
+                        {{ __('TV Shows') }}
+                    </flux:sidebar.item>
+                </flux:sidebar.group>
             </flux:sidebar.nav>
 
             <flux:spacer />

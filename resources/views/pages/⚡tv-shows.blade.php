@@ -324,12 +324,12 @@ new #[Title('TV Shows')] class extends Component
                                 </div>
                             @endif
                             @if ($show->is_finished)
-                                <span class="absolute top-2 right-2">
-                                    <flux:badge size="sm" color="zinc">{{ __('Finished') }}</flux:badge>
+                                <span class="absolute top-2 right-2 drop-shadow">
+                                    <flux:badge size="sm" color="zinc" variant="solid">{{ __('Finished') }}</flux:badge>
                                 </span>
                             @else
-                                <span class="absolute top-2 right-2">
-                                    <flux:badge size="sm" color="lime">{{ __('Ongoing') }}</flux:badge>
+                                <span class="absolute top-2 right-2 drop-shadow">
+                                    <flux:badge size="sm" color="lime" variant="solid">{{ __('Ongoing') }}</flux:badge>
                                 </span>
                             @endif
                         </div>

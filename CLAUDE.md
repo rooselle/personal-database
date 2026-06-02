@@ -191,4 +191,10 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - Dark mode: handled by Flux via @fluxAppearance, toggled in settings/appearance
 - Routes: web.php, dashboard requires auth, welcome is public
 
+## Collaboration
+
+- If the user communicates in French, always reply in French.
+- All code, variable names, comments, and UI text must remain in English.
+- When the user signals approval ("All good", "It's good", "It's perfect", etc. or its French translation), review the conversation for important non-obvious information and save it to memory files and/or this CLAUDE.md if relevant for future sessions.
+
 </laravel-boost-guidelines>

@@ -22,33 +22,6 @@
                 <span class="font-semibold text-white drop-shadow">{{ config('app.name') }}</span>
             </div>
 
-            @if (Route::has('login'))
-                <nav class="flex items-center gap-3">
-                    @auth
-                        <a
-                            href="{{ route('dashboard') }}"
-                            class="inline-block px-5 py-1.5 bg-white/20 hover:bg-white/30 backdrop-blur text-white border border-white/30 rounded-md text-sm leading-normal transition-colors"
-                        >
-                            Dashboard
-                        </a>
-                    @else
-                        <a
-                            href="{{ route('login') }}"
-                            class="inline-block px-5 py-1.5 text-white hover:text-white/80 border border-transparent hover:border-white/30 rounded-md text-sm leading-normal transition-colors"
-                        >
-                            Log in
-                        </a>
-
-                        @if (Route::has('register'))
-                            <a
-                                href="{{ route('register') }}"
-                                class="inline-block px-5 py-1.5 bg-white/20 hover:bg-white/30 backdrop-blur text-white border border-white/30 rounded-md text-sm leading-normal transition-colors">
-                                Register
-                            </a>
-                        @endif
-                    @endauth
-                </nav>
-            @endif
         </header>
 
         {{-- Hero --}}
@@ -121,7 +94,11 @@
         </div>
 
         <footer class="bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 px-6 py-4 text-center text-xs text-zinc-400 dark:text-zinc-600">
-            <a href="{{ route('login') }}" class="hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors">Sign in</a>
+            @auth
+                <a href="{{ route('dashboard') }}" class="hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors">__('Dashboard')</a>
+            @else
+                <a href="{{ route('login') }}" class="hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors">__('Sign in')</a>
+            @endauth
             &nbsp;·&nbsp;
             Photo by
             <a href="https://unsplash.com/fr/@lifeof_peter_" target="_blank" class="hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors underline underline-offset-2">Peter Thomas</a>

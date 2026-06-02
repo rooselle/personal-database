@@ -64,3 +64,9 @@ select:focus[data-flux-control] {
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+
+/* Keep the horizontal scrollbar visible in the viewport when the table is long */
+ui-table-scroll-area {
+    display: block;
+    max-height: calc(100dvh - 14rem);
+}

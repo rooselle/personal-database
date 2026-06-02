@@ -84,14 +84,14 @@ new #[Title('Dashboard')] class extends Component
                 <flux:text size="sm" class="text-neutral-500 dark:text-zinc-400">{{ __('Per year') }}</flux:text>
                 @if(count($this->stats['books']['by_year']))
                     @php $maxBooks = max($this->stats['books']['by_year']); @endphp
-                    <div class="mt-2 flex h-12 items-end gap-1">
+                    <div class="mt-2 flex items-end gap-1">
                         @foreach($this->stats['books']['by_year'] as $year => $count)
-                            <div class="group relative flex flex-1 flex-col items-center">
+                            <div class="relative flex flex-1 flex-col items-center gap-0.5">
                                 <div
                                     class="w-full rounded-sm bg-accent/70 transition-colors hover:bg-accent"
-                                    style="height: {{ $maxBooks > 0 ? round(($count / $maxBooks) * 100) : 0 }}%"
+                                    style="height: {{ $maxBooks > 0 ? round(($count / $maxBooks) * 36) : 0 }}px"
                                 ></div>
-                                <span class="mt-1 text-[9px] text-neutral-400 dark:text-zinc-500">{{ substr($year, 2) }}</span>
+                                <span class="text-[9px] text-neutral-400 dark:text-zinc-500">{{ substr($year, 2) }}</span>
                             </div>
                         @endforeach
                     </div>
@@ -131,14 +131,14 @@ new #[Title('Dashboard')] class extends Component
                 <flux:text size="sm" class="text-neutral-500 dark:text-zinc-400">{{ __('Per year') }}</flux:text>
                 @if(count($this->stats['movies']['by_year']))
                     @php $maxMovies = max($this->stats['movies']['by_year']); @endphp
-                    <div class="mt-2 flex h-12 items-end gap-1">
+                    <div class="mt-2 flex items-end gap-1">
                         @foreach($this->stats['movies']['by_year'] as $year => $count)
-                            <div class="group relative flex flex-1 flex-col items-center">
+                            <div class="relative flex flex-1 flex-col items-center gap-0.5">
                                 <div
                                     class="w-full rounded-sm bg-accent/70 transition-colors hover:bg-accent"
-                                    style="height: {{ $maxMovies > 0 ? round(($count / $maxMovies) * 100) : 0 }}%"
+                                    style="height: {{ $maxMovies > 0 ? round(($count / $maxMovies) * 36) : 0 }}px"
                                 ></div>
-                                <span class="mt-1 text-[9px] text-neutral-400 dark:text-zinc-500">{{ substr($year, 2) }}</span>
+                                <span class="text-[9px] text-neutral-400 dark:text-zinc-500">{{ substr($year, 2) }}</span>
                             </div>
                         @endforeach
                     </div>

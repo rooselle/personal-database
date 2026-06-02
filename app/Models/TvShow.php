@@ -14,6 +14,7 @@ class TvShow extends Model
 
     protected $fillable = [
         'title',
+        'cover_url',
         'year_released',
         'creators',
         'genres',

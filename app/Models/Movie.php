@@ -13,6 +13,7 @@ class Movie extends Model
 
     protected $fillable = [
         'title',
+        'cover_url',
         'year_released',
         'directors',
         'genres',

@@ -179,4 +179,16 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - To run all tests in a file: `php artisan test --compact tests/Feature/ExampleTest.php`.
 - To filter on a particular test name: `php artisan test --compact --filter=testName` (recommended after making a change to a related file).
 
+=== app rules ===
+
+## App Architecture
+
+- Models: Book, Movie, TvShow, TvShowSeason (in app/Models/)
+- Main views: welcome.blade.php (public homepage), dashboard.blade.php, pages/{books,movies,tv-shows}
+- Layout: sidebar at resources/views/layouts/app/sidebar.blade.php
+- Head partial: resources/views/partials/head.blade.php
+- App name/branding in: components/app-logo.blade.php + app-logo-icon.blade.php
+- Dark mode: handled by Flux via @fluxAppearance, toggled in settings/appearance
+- Routes: web.php, dashboard requires auth, welcome is public
+
 </laravel-boost-guidelines>

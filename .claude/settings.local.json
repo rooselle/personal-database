@@ -4,7 +4,11 @@
       "mcp__laravel-boost__search-docs",
       "Bash(vendor/bin/pint *)",
       "mcp__laravel-boost__get-absolute-url",
-      "Bash(php artisan *)"
+      "Bash(php artisan *)",
+      "Bash(npm run *)",
+      "mcp__laravel-boost__database-query",
+      "WebSearch",
+      "WebFetch(domain:www.themoviedb.org)"
     ]
   },
   "enableAllProjectMcpServers": true,

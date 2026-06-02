@@ -18,6 +18,8 @@
         "livewire/livewire": "^4.1"
     },
     "require-dev": {
+        "captainhook/captainhook": "^5.29",
+        "captainhook/plugin-composer": "^5.3",
         "fakerphp/faker": "^1.24",
         "laravel/boost": "^2.2",
         "laravel/pail": "^1.2.5",
@@ -26,6 +28,7 @@
         "laravel/sail": "^1.53",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.9.3",
+        "nunomaduro/larastan": "^3.10",
         "phpunit/phpunit": "^12.5.23"
     },
     "autoload": {
@@ -102,7 +105,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "captainhook/plugin-composer": true
         }
     },
     "minimum-stability": "stable",

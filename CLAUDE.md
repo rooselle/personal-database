@@ -179,7 +179,7 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - To run all tests in a file: `php artisan test --compact tests/Feature/ExampleTest.php`.
 - To filter on a particular test name: `php artisan test --compact --filter=testName` (recommended after making a change to a related file).
 
-=== app rules ===
+</laravel-boost-guidelines>
 
 ## App Architecture
 
@@ -200,11 +200,9 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 ## Translation
 
 - Always wrap new UI strings with `__('English key')` and add the corresponding French translation to `lang/fr.json`. Never hardcode bare English strings in views — the French translation is what the user will see.
-- At the end of each session (when the user signals approval), remove any keys from `lang/fr.json` that are no longer used in the application.
+- Unused keys in `lang/fr.json` are removed automatically by the `pre-commit` git hook (`php artisan translations:prune`). Do not remove them manually.
 - Translation preferences:
     - Use inclusive writing for French translations: Auteur·rice, Réalisateur·rice(s), Créateur·rice(s), etc.
     - "Publisher" → "Maison d'édition" (not "Éditeur")
     - Date column headers use distinct keys from status badges: `__('Finished on')` → "Terminé le" (books), `__('Watched on')` → "Vu le" (movies); status badges use `__('Finished')` → "Terminée" (TV shows), `__('Watched')` → "Vu" (seasons)
     - App name: always use `__(config('app.name'))`, including in `partials/head.blade.php` and `components/app-logo.blade.php`
-
-</laravel-boost-guidelines>

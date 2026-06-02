@@ -33,6 +33,7 @@ class TvShowSeason extends Model
         ];
     }
 
+    /** @return BelongsTo<TvShow, $this> */
     public function tvShow(): BelongsTo
     {
         return $this->belongsTo(TvShow::class);

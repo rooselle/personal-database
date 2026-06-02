@@ -31,6 +31,7 @@ class TvShow extends Model
         ];
     }
 
+    /** @return HasMany<TvShowSeason, $this> */
     public function seasons(): HasMany
     {
         return $this->hasMany(TvShowSeason::class)->orderBy('season_number');

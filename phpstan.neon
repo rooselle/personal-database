@@ -1,0 +1,10 @@
+includes:
+    - vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+    paths:
+        - app/
+    level: 10
+    ignoreErrors:
+        - identifier: return.type
+          path: app/Concerns/PasswordValidationRules.php

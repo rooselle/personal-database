@@ -26,7 +26,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.5'
 
       - name: Add Flux Credentials Loaded From ENV
         run: composer config http-basic.composer.fluxui.dev "${{ secrets.FLUX_USERNAME }}" "${{ secrets.FLUX_LICENSE_KEY }}"
@@ -38,6 +38,9 @@ jobs:
 
       - name: Run Pint
         run: composer lint
+
+      - name: Analyse code (Larastan)
+        run: vendor/bin/phpstan analyse --no-progress --memory-limit=512M
 
       # - name: Commit Changes
       #   uses: stefanzweifel/git-auto-commit-action@v7

@@ -74,14 +74,14 @@ new #[Title('Movies')] class extends Component
         unset($this->movies);
 
         Flux::modal('add-movie')->close();
-        Flux::toast(variant: 'success', text: 'Movie added successfully.');
+        Flux::toast(variant: 'success', text: __('Movie added successfully.'));
     }
 
     public function deleteMovie(int $id): void
     {
         Movie::findOrFail($id)->delete();
         unset($this->movies);
-        Flux::toast(variant: 'success', text: 'Movie deleted.');
+        Flux::toast(variant: 'success', text: __('Movie deleted.'));
     }
 }; ?>
 
@@ -131,7 +131,7 @@ new #[Title('Movies')] class extends Component
         <flux:table>
             <flux:table.columns>
                 <flux:table.column></flux:table.column>
-                <flux:table.column>{{ __('Watched') }}</flux:table.column>
+                <flux:table.column>{{ __('Watched on') }}</flux:table.column>
                 <flux:table.column>{{ __('Title') }}</flux:table.column>
                 <flux:table.column>{{ __('Year') }}</flux:table.column>
                 <flux:table.column>{{ __('Director(s)') }}</flux:table.column>

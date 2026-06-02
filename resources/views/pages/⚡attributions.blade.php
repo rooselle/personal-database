@@ -20,29 +20,25 @@ new #[Title('Attributions')] class extends Component
         <div class="rounded-xl border border-neutral-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:heading size="lg" class="mb-2">{{ __('Photography') }}</flux:heading>
             <flux:text class="text-neutral-600 dark:text-zinc-300">
-                Homepage photo by
+                {{ __('Photo by') }}
                 <a href="https://unsplash.com/fr/@lifeof_peter_" target="_blank" class="font-medium underline underline-offset-4 hover:text-accent">
                     Peter Thomas
                 </a>
-                on
-                <a href="https://unsplash.com" target="_blank" class="font-medium underline underline-offset-4 hover:text-accent">
-                    Unsplash
-                </a>.
+                {{ __('on Unsplash') }}.
             </flux:text>
         </div>
 
         <div class="rounded-xl border border-neutral-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:heading size="lg" class="mb-2">{{ __('Icons') }}</flux:heading>
             <flux:text class="text-neutral-600 dark:text-zinc-300">
-                App icon (book stack) from
-                <a href="https://www.flaticon.com/free-icons/book" target="_blank" class="font-medium underline underline-offset-4 hover:text-accent">
-                    Flaticon
-                </a>.
-                Book icons created by
+                {{ __('App icon (book stack) by') }}
                 <a href="https://www.flaticon.com/authors/smashicons" target="_blank" class="font-medium underline underline-offset-4 hover:text-accent">
                     Smashicons
                 </a>
-                — Flaticon.
+                {{ __('on') }}
+                <a href="https://www.flaticon.com/free-icons/book" target="_blank" class="font-medium underline underline-offset-4 hover:text-accent">
+                    Flaticon
+                </a>.
             </flux:text>
         </div>
     </div>

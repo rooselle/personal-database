@@ -46,7 +46,7 @@
                 >
                     <flux:icon.sun x-show="$flux.appearance === 'dark'" class="size-5 shrink-0" />
                     <flux:icon.moon x-show="$flux.appearance !== 'dark'" class="size-5 shrink-0" />
-                    <span x-text="$flux.appearance === 'dark' ? 'Light mode' : 'Dark mode'"></span>
+                    <span x-text="$flux.appearance === 'dark' ? '{{ __('Light mode') }}' : '{{ __('Dark mode') }}'"></span>
                 </button>
             </div>
 

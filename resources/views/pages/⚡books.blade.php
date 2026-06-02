@@ -74,14 +74,14 @@ new #[Title('Books')] class extends Component
         unset($this->books);
 
         Flux::modal('add-book')->close();
-        Flux::toast(variant: 'success', text: 'Book added successfully.');
+        Flux::toast(variant: 'success', text: __('Book added successfully.'));
     }
 
     public function deleteBook(int $id): void
     {
         Book::findOrFail($id)->delete();
         unset($this->books);
-        Flux::toast(variant: 'success', text: 'Book deleted.');
+        Flux::toast(variant: 'success', text: __('Book deleted.'));
     }
 }; ?>
 
@@ -131,7 +131,7 @@ new #[Title('Books')] class extends Component
         <flux:table>
             <flux:table.columns>
                 <flux:table.column></flux:table.column>
-                <flux:table.column>{{ __('Finished') }}</flux:table.column>
+                <flux:table.column>{{ __('Finished on') }}</flux:table.column>
                 <flux:table.column>{{ __('Title') }}</flux:table.column>
                 <flux:table.column>{{ __('Author') }}</flux:table.column>
                 <flux:table.column>{{ __('Year') }}</flux:table.column>

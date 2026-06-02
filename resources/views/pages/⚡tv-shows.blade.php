@@ -86,14 +86,14 @@ new #[Title('TV Shows')] class extends Component
         unset($this->tvShows);
 
         Flux::modal('add-show')->close();
-        Flux::toast(variant: 'success', text: 'Show added successfully.');
+        Flux::toast(variant: 'success', text: __('Show added successfully.'));
     }
 
     public function deleteShow(int $id): void
     {
         TvShow::findOrFail($id)->delete();
         unset($this->tvShows);
-        Flux::toast(variant: 'success', text: 'Show deleted.');
+        Flux::toast(variant: 'success', text: __('Show deleted.'));
     }
 
     public function openSeasons(int $showId): void
@@ -129,14 +129,14 @@ new #[Title('TV Shows')] class extends Component
         $this->resetSeasonForm();
         unset($this->tvShows, $this->selectedShow);
 
-        Flux::toast(variant: 'success', text: 'Season added.');
+        Flux::toast(variant: 'success', text: __('Season added.'));
     }
 
     public function deleteSeason(int $id): void
     {
         TvShowSeason::findOrFail($id)->delete();
         unset($this->tvShows, $this->selectedShow);
-        Flux::toast(variant: 'success', text: 'Season deleted.');
+        Flux::toast(variant: 'success', text: __('Season deleted.'));
     }
 
     private function resetSeasonForm(): void

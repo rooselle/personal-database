@@ -5,10 +5,9 @@ use App\Models\TvShowSeason;
 use Flux\Flux;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Computed;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('TV Shows')] class extends Component
+new class extends Component
 {
     public string $search = '';
     public string $displayMode = 'list';
@@ -157,6 +156,11 @@ new #[Title('TV Shows')] class extends Component
         }
 
         return $this->selectedShow->seasons->max('season_number') + 1 ?? 1;
+    }
+
+    public function render(): \Illuminate\View\View
+    {
+        return $this->view()->title(__('TV Shows'));
     }
 }; ?>
 

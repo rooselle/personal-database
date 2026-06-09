@@ -4,10 +4,9 @@ use App\Models\Book;
 use Flux\Flux;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Computed;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('Books')] class extends Component
+new class extends Component
 {
     public string $search = '';
     public string $displayMode = 'list';
@@ -82,6 +81,11 @@ new #[Title('Books')] class extends Component
         Book::findOrFail($id)->delete();
         unset($this->books);
         Flux::toast(variant: 'success', text: __('Book deleted.'));
+    }
+
+    public function render(): \Illuminate\View\View
+    {
+        return $this->view()->title(__('Books'));
     }
 }; ?>
 

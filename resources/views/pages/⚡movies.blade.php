@@ -4,10 +4,9 @@ use App\Models\Movie;
 use Flux\Flux;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Computed;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('Movies')] class extends Component
+new class extends Component
 {
     public string $search = '';
     public string $displayMode = 'list';
@@ -82,6 +81,11 @@ new #[Title('Movies')] class extends Component
         Movie::findOrFail($id)->delete();
         unset($this->movies);
         Flux::toast(variant: 'success', text: __('Movie deleted.'));
+    }
+
+    public function render(): \Illuminate\View\View
+    {
+        return $this->view()->title(__('Movies'));
     }
 }; ?>
 

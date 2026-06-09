@@ -27,4 +27,14 @@ class TvShowSeasonFactory extends Factory
             'comment' => fake()->boolean(30) ? fake()->sentence() : null,
         ];
     }
+
+    public function notStarted(): static
+    {
+        return $this->state([
+            'watched_episodes' => 0,
+            'rating' => null,
+            'is_favorite' => false,
+            'comment' => null,
+        ]);
+    }
 }

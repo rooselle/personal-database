@@ -77,6 +77,11 @@ L'application est disponible sur **http://localhost**.
 ./vendor/bin/sail artisan db:seed
 ```
 
+**Vider la base et recommencer le seed :**
+```bash
+./vendor/bin/sail artisan migrate:fresh --seed
+```
+
 **Tests :**
 ```bash
 ./vendor/bin/sail artisan test --compact

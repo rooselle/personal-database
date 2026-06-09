@@ -181,6 +181,11 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 
 </laravel-boost-guidelines>
 
+## Sail
+
+- All commands must be run via Sail: `sail artisan`, `sail php`, `sail composer`, `sail npm`, etc.
+- Never run `php artisan`, `composer`, or `npm` directly — the app runs in Docker and the host machine cannot reach the `pgsql` container.
+
 ## App Architecture
 
 - Models: Book, Movie, TvShow, TvShowSeason (in app/Models/)

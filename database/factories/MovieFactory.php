@@ -26,11 +26,19 @@ class MovieFactory extends Factory
         ['title' => 'Little Women', 'directors' => ['Greta Gerwig'], 'genres' => ['Drama', 'Romance'], 'year' => 2019],
         ['title' => 'Tár', 'directors' => ['Todd Field'], 'genres' => ['Drama', 'Music'], 'year' => 2022],
         ['title' => 'The Power of the Dog', 'directors' => ['Jane Campion'], 'genres' => ['Drama', 'Western'], 'year' => 2021],
+        ['title' => 'Arrival', 'directors' => ['Denis Villeneuve'], 'genres' => ['Science Fiction', 'Drama'], 'year' => 2016],
+        ['title' => 'The Shape of Water', 'directors' => ['Guillermo del Toro'], 'genres' => ['Fantasy', 'Drama', 'Romance'], 'year' => 2017],
+        ['title' => 'Amélie', 'directors' => ['Jean-Pierre Jeunet'], 'genres' => ['Comedy', 'Romance'], 'year' => 2001],
+        ['title' => 'Lost in Translation', 'directors' => ['Sofia Coppola'], 'genres' => ['Drama', 'Comedy'], 'year' => 2003],
+        ['title' => 'Lady Bird', 'directors' => ['Greta Gerwig'], 'genres' => ['Drama', 'Comedy'], 'year' => 2017],
     ];
+
+    private static int $index = 0;
 
     public function definition(): array
     {
-        $movie = fake()->randomElement(self::$movies);
+        $movie = self::$movies[self::$index % count(self::$movies)];
+        self::$index++;
         $rating = fake()->numberBetween(1, 5);
 
         return [

@@ -22,42 +22,20 @@ class DatabaseSeeder extends Seeder
 
         Movie::factory(20)->create();
 
-        $shows = [
-            ['title' => 'The Bear', 'creators' => ['Christopher Storer'], 'genres' => ['Drama', 'Comedy'], 'year_released' => 2022, 'is_finished' => false, 'seasons' => [
-                ['season_number' => 1, 'episode_count' => 8, 'watched_episodes' => 8, 'rating' => 5, 'is_favorite' => true, 'comment' => 'Masterpiece. The best season of TV in years.'],
-                ['season_number' => 2, 'episode_count' => 10, 'watched_episodes' => 10, 'rating' => 5, 'is_favorite' => true, 'comment' => null],
-                ['season_number' => 3, 'episode_count' => 10, 'watched_episodes' => 6, 'rating' => null, 'is_favorite' => false, 'comment' => null],
-            ]],
-            ['title' => 'Succession', 'creators' => ['Jesse Armstrong'], 'genres' => ['Drama', 'Comedy'], 'year_released' => 2018, 'is_finished' => true, 'seasons' => [
-                ['season_number' => 1, 'episode_count' => 10, 'watched_episodes' => 10, 'rating' => 4, 'is_favorite' => false, 'comment' => null],
-                ['season_number' => 2, 'episode_count' => 10, 'watched_episodes' => 10, 'rating' => 5, 'is_favorite' => false, 'comment' => null],
-                ['season_number' => 3, 'episode_count' => 9, 'watched_episodes' => 9, 'rating' => 4, 'is_favorite' => false, 'comment' => null],
-                ['season_number' => 4, 'episode_count' => 10, 'watched_episodes' => 10, 'rating' => 5, 'is_favorite' => true, 'comment' => 'Perfect ending.'],
-            ]],
-            ['title' => 'Fleabag', 'creators' => ['Phoebe Waller-Bridge'], 'genres' => ['Comedy', 'Drama'], 'year_released' => 2016, 'is_finished' => true, 'seasons' => [
-                ['season_number' => 1, 'episode_count' => 6, 'watched_episodes' => 6, 'rating' => 5, 'is_favorite' => false, 'comment' => null],
-                ['season_number' => 2, 'episode_count' => 6, 'watched_episodes' => 6, 'rating' => 5, 'is_favorite' => true, 'comment' => 'One of the best things ever made.'],
-            ]],
-            ['title' => 'Severance', 'creators' => ['Dan Erickson'], 'genres' => ['Science Fiction', 'Thriller', 'Drama'], 'year_released' => 2022, 'is_finished' => false, 'seasons' => [
-                ['season_number' => 1, 'episode_count' => 9, 'watched_episodes' => 9, 'rating' => 5, 'is_favorite' => true, 'comment' => null],
-                ['season_number' => 2, 'episode_count' => 10, 'watched_episodes' => 10, 'rating' => 4, 'is_favorite' => false, 'comment' => null],
-            ]],
-            ['title' => 'The White Lotus', 'creators' => ['Mike White'], 'genres' => ['Drama', 'Comedy', 'Mystery'], 'year_released' => 2021, 'is_finished' => false, 'seasons' => [
-                ['season_number' => 1, 'episode_count' => 6, 'watched_episodes' => 6, 'rating' => 4, 'is_favorite' => false, 'comment' => null],
-                ['season_number' => 2, 'episode_count' => 7, 'watched_episodes' => 7, 'rating' => 5, 'is_favorite' => true, 'comment' => 'Absolutely hooked.'],
-                ['season_number' => 3, 'episode_count' => 8, 'watched_episodes' => 3, 'rating' => null, 'is_favorite' => false, 'comment' => null],
-            ]],
-        ];
+        TvShow::factory(5)->create()->each(function (TvShow $show) {
+            $seasonCount = fake()->numberBetween(1, 4);
+            $previousCompleted = true;
 
-        foreach ($shows as $showData) {
-            $seasons = $showData['seasons'];
-            unset($showData['seasons']);
+            foreach (range(1, $seasonCount) as $seasonNumber) {
+                $season = TvShowSeason::factory()
+                    ->when(! $previousCompleted, fn ($f) => $f->notStarted())
+                    ->create([
+                        'tv_show_id' => $show->id,
+                        'season_number' => $seasonNumber,
+                    ]);
 
-            $show = TvShow::create($showData);
-
-            foreach ($seasons as $seasonData) {
-                TvShowSeason::create(array_merge($seasonData, ['tv_show_id' => $show->id]));
+                $previousCompleted = $season->watched_episodes === $season->episode_count;
             }
-        }
+        });
     }
 }

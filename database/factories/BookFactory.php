@@ -26,11 +26,19 @@ class BookFactory extends Factory
         ['title' => 'The Handmaid\'s Tale', 'author' => 'Margaret Atwood', 'publisher' => 'McClelland & Stewart', 'year' => 1985],
         ['title' => 'Never Let Me Go', 'author' => 'Kazuo Ishiguro', 'publisher' => 'Faber & Faber', 'year' => 2005],
         ['title' => 'The Alchemist', 'author' => 'Paulo Coelho', 'publisher' => 'HarperCollins', 'year' => 1988],
+        ['title' => 'Beloved', 'author' => 'Toni Morrison', 'publisher' => 'Alfred A. Knopf', 'year' => 1987],
+        ['title' => 'The Bell Jar', 'author' => 'Sylvia Plath', 'publisher' => 'Heinemann', 'year' => 1963],
+        ['title' => '1984', 'author' => 'George Orwell', 'publisher' => 'Secker & Warburg', 'year' => 1949],
+        ['title' => 'Educated', 'author' => 'Tara Westover', 'publisher' => 'Random House', 'year' => 2018],
+        ['title' => 'Where the Crawdads Sing', 'author' => 'Delia Owens', 'publisher' => 'G.P. Putnam\'s Sons', 'year' => 2018],
     ];
+
+    private static int $index = 0;
 
     public function definition(): array
     {
-        $book = fake()->randomElement(self::$books);
+        $book = self::$books[self::$index % count(self::$books)];
+        self::$index++;
         $rating = fake()->numberBetween(1, 5);
 
         return [

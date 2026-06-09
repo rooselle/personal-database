@@ -15,7 +15,7 @@
         "enabled": true,
         "actions": [
             {
-                "action": "php artisan translations:prune"
+                "action": "./vendor/bin/sail artisan translations:prune"
             },
             {
                 "action": "git add lang/fr.json"
@@ -26,13 +26,13 @@
         "enabled": true,
         "actions": [
             {
-                "action": "vendor/bin/pint --test"
+                "action": "./vendor/bin/sail bin pint --test"
             },
             {
-                "action": "vendor/bin/phpstan analyse --no-progress --memory-limit=512M"
+                "action": "./vendor/bin/sail bin phpstan analyse --no-progress --memory-limit=512M"
             },
             {
-                "action": "php artisan test --compact"
+                "action": "./vendor/bin/sail artisan test --compact"
             }
         ]
     }

@@ -23,9 +23,9 @@ new #[Title('Dashboard')] class extends Component
                 'last_year' => Book::whereYear('finished_at', $lastYear)->count(),
                 'favorites' => Book::where('is_favorite', true)->count(),
                 'avg_rating' => round(Book::whereNotNull('rating')->avg('rating'), 1),
-                'by_year' => Book::selectRaw('strftime("%Y", finished_at) as year, COUNT(*) as count')
+                'by_year' => Book::selectRaw("TO_CHAR(finished_at, 'YYYY') as year, COUNT(*) as count")
                     ->whereNotNull('finished_at')
-                    ->groupByRaw('strftime("%Y", finished_at)')
+                    ->groupByRaw("TO_CHAR(finished_at, 'YYYY')")
                     ->orderBy('year')
                     ->pluck('count', 'year')
                     ->toArray(),
@@ -36,9 +36,9 @@ new #[Title('Dashboard')] class extends Component
                 'last_year' => Movie::whereYear('finished_at', $lastYear)->count(),
                 'favorites' => Movie::where('is_favorite', true)->count(),
                 'avg_rating' => round(Movie::whereNotNull('rating')->avg('rating'), 1),
-                'by_year' => Movie::selectRaw('strftime("%Y", finished_at) as year, COUNT(*) as count')
+                'by_year' => Movie::selectRaw("TO_CHAR(finished_at, 'YYYY') as year, COUNT(*) as count")
                     ->whereNotNull('finished_at')
-                    ->groupByRaw('strftime("%Y", finished_at)')
+                    ->groupByRaw("TO_CHAR(finished_at, 'YYYY')")
                     ->orderBy('year')
                     ->pluck('count', 'year')
                     ->toArray(),

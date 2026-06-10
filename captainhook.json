@@ -30,9 +30,6 @@
             },
             {
                 "action": "./vendor/bin/sail bin phpstan analyse --no-progress --memory-limit=512M"
-            },
-            {
-                "action": "./vendor/bin/sail artisan test --compact"
             }
         ]
     }

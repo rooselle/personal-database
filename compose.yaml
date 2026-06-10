@@ -47,6 +47,7 @@ services:
                 - '${DB_DATABASE}'
                 - '-U'
                 - '${DB_USERNAME}'
+            interval: 2s
             retries: 3
             timeout: 5s
 networks:

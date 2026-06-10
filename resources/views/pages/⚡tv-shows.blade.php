@@ -29,6 +29,8 @@ new class extends Component
     public bool $seasonIsFavorite = false;
     public string $seasonComment = '';
 
+    public ?int $editingSeasonId = null;
+
     #[Computed]
     public function tvShows(): Collection
     {
@@ -136,6 +138,59 @@ new class extends Component
         TvShowSeason::findOrFail($id)->delete();
         unset($this->tvShows, $this->selectedShow);
         Flux::toast(variant: 'success', text: __('Season deleted.'));
+    }
+
+    public function openEditSeason(int $id): void
+    {
+        $season = TvShowSeason::findOrFail($id);
+        $this->editingSeasonId = $id;
+        $this->episodeCount = (string) $season->episode_count;
+        $this->watchedEpisodes = (string) $season->watched_episodes;
+        $this->seasonRating = $season->rating !== null ? (string) $season->rating : '';
+        $this->seasonIsFavorite = $season->is_favorite;
+        $this->seasonComment = $season->comment ?? '';
+        $this->resetValidation(['episodeCount', 'watchedEpisodes', 'seasonRating', 'seasonIsFavorite', 'seasonComment']);
+    }
+
+    public function cancelEditSeason(): void
+    {
+        $this->editingSeasonId = null;
+        $this->resetSeasonForm();
+    }
+
+    public function updateSeason(): void
+    {
+        $this->validate([
+            'episodeCount' => ['required', 'integer', 'min:1', 'max:999'],
+            'watchedEpisodes' => ['required', 'integer', 'min:0', 'max:'.($this->episodeCount ?: 999)],
+            'seasonRating' => ['nullable', 'integer', 'min:1', 'max:5'],
+            'seasonIsFavorite' => ['boolean'],
+            'seasonComment' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        TvShowSeason::findOrFail($this->editingSeasonId)->update([
+            'episode_count' => (int) $this->episodeCount,
+            'watched_episodes' => (int) $this->watchedEpisodes,
+            'rating' => $this->seasonRating !== '' ? (int) $this->seasonRating : null,
+            'is_favorite' => $this->seasonIsFavorite,
+            'comment' => $this->seasonComment ?: null,
+        ]);
+
+        $this->editingSeasonId = null;
+        $this->resetSeasonForm();
+        unset($this->tvShows, $this->selectedShow);
+
+        Flux::toast(variant: 'success', text: __('Season updated.'));
+    }
+
+    public function incrementWatchedEpisodes(int $id): void
+    {
+        $season = TvShowSeason::findOrFail($id);
+
+        if ($season->watched_episodes < $season->episode_count) {
+            $season->increment('watched_episodes');
+            unset($this->tvShows, $this->selectedShow);
+        }
     }
 
     private function resetSeasonForm(): void
@@ -455,109 +510,97 @@ new class extends Component
                         <flux:heading size="sm">{{ __('Seasons') }}</flux:heading>
 
                         @foreach ($this->selectedShow->seasons as $season)
-                            <div class="rounded-lg border border-zinc-200 dark:border-zinc-700 p-3 space-y-2">
-                                <div class="flex items-start justify-between gap-2">
-                                    <div class="space-y-1 flex-1">
-                                        <div class="flex items-center gap-2">
-                                            <span class="font-medium text-sm">{{ __('Season') }} {{ $season->season_number }}</span>
-                                            @if ($season->isFullyWatched())
-                                                <flux:badge size="sm" color="lime" icon="check">{{ __('Watched') }}</flux:badge>
-                                            @elseif ($season->watched_episodes > 0)
-                                                <flux:badge size="sm" color="amber">{{ __('In progress') }}</flux:badge>
-                                            @else
-                                                <flux:badge size="sm" color="zinc">{{ __('Not started') }}</flux:badge>
-                                            @endif
-                                        </div>
+                            <div class="rounded-lg border border-zinc-200 dark:border-zinc-700 p-3" wire:key="season-{{ $season->id }}">
+                                @if ($editingSeasonId === $season->id)
+                                    {{-- Inline edit form --}}
+                                    <form wire:submit="updateSeason" class="space-y-3">
+                                        <span class="font-medium text-sm">{{ __('Season') }} {{ $season->season_number }}</span>
 
-                                        <div class="text-sm text-zinc-500 dark:text-zinc-400">
-                                            {{ $season->watched_episodes }}/{{ $season->episode_count }} {{ __('episodes') }}
-                                            @if ($season->episode_count > 0)
-                                                · {{ round(($season->watched_episodes / $season->episode_count) * 100) }}%
-                                            @endif
-                                        </div>
+                                        <x-season-form-fields :current-rating="$seasonRating" />
 
-                                        @if ($season->rating)
-                                            <div class="flex items-center gap-0.5 text-sm leading-none">
-                                                @for ($i = 1; $i <= 5; $i++)
-                                                    <span class="{{ $i <= $season->rating ? 'text-amber-400' : 'text-zinc-200 dark:text-zinc-700' }}">★</span>
-                                                @endfor
-                                                @if ($season->is_favorite)
-                                                    <span class="text-rose-500 ml-1">♥</span>
+                                        <div class="flex gap-2">
+                                            <flux:button type="submit" variant="primary" size="sm">{{ __('Save changes') }}</flux:button>
+                                            <flux:button wire:click="cancelEditSeason" variant="ghost" size="sm">{{ __('Cancel') }}</flux:button>
+                                        </div>
+                                    </form>
+                                @else
+                                    {{-- Normal display --}}
+                                    <div class="flex items-start justify-between gap-2">
+                                        <div class="space-y-1 flex-1">
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-medium text-sm">{{ __('Season') }} {{ $season->season_number }}</span>
+                                                @if ($season->isFullyWatched())
+                                                    <flux:badge size="sm" color="lime" icon="check">{{ __('Watched') }}</flux:badge>
+                                                @elseif ($season->watched_episodes > 0)
+                                                    <flux:badge size="sm" color="amber">{{ __('In progress') }}</flux:badge>
+                                                @else
+                                                    <flux:badge size="sm" color="zinc">{{ __('Not started') }}</flux:badge>
                                                 @endif
                                             </div>
-                                        @endif
 
-                                        @if ($season->comment)
-                                            <flux:text class="text-xs italic">{{ $season->comment }}</flux:text>
-                                        @endif
+                                            <div class="text-sm text-zinc-500 dark:text-zinc-400">
+                                                {{ $season->watched_episodes }}/{{ $season->episode_count }} {{ __('episodes') }}
+                                                @if ($season->episode_count > 0)
+                                                    · {{ round(($season->watched_episodes / $season->episode_count) * 100) }}%
+                                                @endif
+                                            </div>
+
+                                            @if ($season->rating)
+                                                <div class="flex items-center gap-0.5 text-sm leading-none">
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        <span class="{{ $i <= $season->rating ? 'text-amber-400' : 'text-zinc-200 dark:text-zinc-700' }}">★</span>
+                                                    @endfor
+                                                    @if ($season->is_favorite)
+                                                        <span class="text-rose-500 ml-1">♥</span>
+                                                    @endif
+                                                </div>
+                                            @endif
+
+                                            @if ($season->comment)
+                                                <flux:text class="text-xs italic">{{ $season->comment }}</flux:text>
+                                            @endif
+                                        </div>
+
+                                        <div class="flex items-center gap-1 shrink-0">
+                                            @if (! $season->isFullyWatched())
+                                                <flux:button
+                                                    wire:click="incrementWatchedEpisodes({{ $season->id }})"
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    title="{{ __('Mark one more episode as watched') }}"
+                                                >+1</flux:button>
+                                            @endif
+                                            <flux:button
+                                                wire:click="openEditSeason({{ $season->id }})"
+                                                variant="ghost"
+                                                size="sm"
+                                                icon="pencil-square"
+                                            />
+                                            <flux:button
+                                                wire:click="deleteSeason({{ $season->id }})"
+                                                wire:confirm="{{ __('Delete this season?') }}"
+                                                variant="ghost"
+                                                size="sm"
+                                                icon="trash"
+                                            />
+                                        </div>
                                     </div>
-
-                                    <flux:button
-                                        wire:click="deleteSeason({{ $season->id }})"
-                                        wire:confirm="{{ __('Delete this season?') }}"
-                                        variant="ghost"
-                                        size="sm"
-                                        icon="trash"
-                                    />
-                                </div>
+                                @endif
                             </div>
                         @endforeach
                     </div>
                 @endif
 
                 {{-- Add season form --}}
+                @if (! $editingSeasonId)
                 <div class="border-t border-zinc-200 dark:border-zinc-700 pt-4 space-y-4">
                     <flux:heading size="sm">{{ __('Add a season') }}</flux:heading>
 
                     <form wire:submit="saveSeason" class="space-y-4">
-                        <div class="grid grid-cols-3 gap-3">
-                            <flux:input
-                                wire:model="seasonNumber"
-                                :label="__('Season')"
-                                type="number"
-                                min="1"
-                                max="99"
-                                :placeholder="(string) $this->nextSeasonNumber()"
-                                required
-                            />
-                            <flux:input
-                                wire:model="episodeCount"
-                                :label="__('Episodes')"
-                                type="number"
-                                min="1"
-                                placeholder="10"
-                                required
-                            />
-                            <flux:input
-                                wire:model="watchedEpisodes"
-                                :label="__('Watched')"
-                                type="number"
-                                min="0"
-                                placeholder="0"
-                                required
-                            />
-                        </div>
-
-                        <div class="space-y-3">
-                            <flux:select wire:model.live="seasonRating" :label="__('Rating')">
-                                <flux:select.option value="">{{ __('Not rated yet') }}</flux:select.option>
-                                <flux:select.option value="1">★☆☆☆☆ — {{ __('I hated it') }}</flux:select.option>
-                                <flux:select.option value="2">★★☆☆☆ — {{ __('I didn\'t like it') }}</flux:select.option>
-                                <flux:select.option value="3">★★★☆☆ — {{ __('I didn\'t like it much') }}</flux:select.option>
-                                <flux:select.option value="4">★★★★☆ — {{ __('I liked it') }}</flux:select.option>
-                                <flux:select.option value="5">★★★★★ — {{ __('I really liked it') }}</flux:select.option>
-                            </flux:select>
-
-                            @if ($seasonRating === '5')
-                                <flux:checkbox wire:model="seasonIsFavorite" :label="__('♥ One of my favourite seasons')" />
-                            @endif
-                        </div>
-
-                        <flux:textarea
-                            wire:model="seasonComment"
-                            :label="__('Comment')"
-                            :placeholder="__('Any thoughts… (optional)')"
-                            rows="2"
+                        <x-season-form-fields
+                            :show-season-number="true"
+                            :next-season-number="$this->nextSeasonNumber()"
+                            :current-rating="$seasonRating"
                         />
 
                         <flux:button type="submit" variant="primary" class="w-full">
@@ -565,6 +608,7 @@ new class extends Component
                         </flux:button>
                     </form>
                 </div>
+                @endif
 
             </div>
         @endif

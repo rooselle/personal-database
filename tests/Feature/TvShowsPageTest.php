@@ -161,4 +161,128 @@ class TvShowsPageTest extends TestCase
             ->set('seasonRating', '4')
             ->assertSet('seasonIsFavorite', false);
     }
+
+    public function test_season_can_be_edited(): void
+    {
+        $this->actingAsUser();
+
+        $show = TvShow::factory()->create();
+        $season = TvShowSeason::factory()->create([
+            'tv_show_id' => $show->id,
+            'season_number' => 1,
+            'episode_count' => 10,
+            'watched_episodes' => 5,
+            'rating' => null,
+            'comment' => null,
+        ]);
+
+        Livewire::test('pages::tv-shows')
+            ->set('selectedShowId', $show->id)
+            ->call('openEditSeason', $season->id)
+            ->assertSet('editingSeasonId', $season->id)
+            ->assertSet('episodeCount', '10')
+            ->assertSet('watchedEpisodes', '5')
+            ->set('watchedEpisodes', '8')
+            ->set('seasonRating', '4')
+            ->set('seasonComment', 'Getting better')
+            ->call('updateSeason')
+            ->assertHasNoErrors()
+            ->assertSet('editingSeasonId', null);
+
+        $this->assertDatabaseHas('tv_show_seasons', [
+            'id' => $season->id,
+            'watched_episodes' => 8,
+            'rating' => 4,
+            'comment' => 'Getting better',
+        ]);
+    }
+
+    public function test_editing_season_validates_required_fields(): void
+    {
+        $this->actingAsUser();
+
+        $show = TvShow::factory()->create();
+        $season = TvShowSeason::factory()->create(['tv_show_id' => $show->id, 'season_number' => 1]);
+
+        Livewire::test('pages::tv-shows')
+            ->call('openEditSeason', $season->id)
+            ->set('episodeCount', '')
+            ->set('watchedEpisodes', '')
+            ->call('updateSeason')
+            ->assertHasErrors(['episodeCount', 'watchedEpisodes']);
+    }
+
+    public function test_cancel_edit_season_clears_editing_state(): void
+    {
+        $this->actingAsUser();
+
+        $show = TvShow::factory()->create();
+        $season = TvShowSeason::factory()->create(['tv_show_id' => $show->id, 'season_number' => 1]);
+
+        Livewire::test('pages::tv-shows')
+            ->call('openEditSeason', $season->id)
+            ->assertSet('editingSeasonId', $season->id)
+            ->call('cancelEditSeason')
+            ->assertSet('editingSeasonId', null);
+    }
+
+    public function test_watched_episodes_can_be_incremented(): void
+    {
+        $this->actingAsUser();
+
+        $show = TvShow::factory()->create();
+        $season = TvShowSeason::factory()->create([
+            'tv_show_id' => $show->id,
+            'season_number' => 1,
+            'episode_count' => 8,
+            'watched_episodes' => 3,
+        ]);
+
+        Livewire::test('pages::tv-shows')
+            ->set('selectedShowId', $show->id)
+            ->call('incrementWatchedEpisodes', $season->id)
+            ->assertHasNoErrors();
+
+        $this->assertDatabaseHas('tv_show_seasons', [
+            'id' => $season->id,
+            'watched_episodes' => 4,
+        ]);
+    }
+
+    public function test_watched_episodes_cannot_exceed_episode_count(): void
+    {
+        $this->actingAsUser();
+
+        $show = TvShow::factory()->create();
+        $season = TvShowSeason::factory()->create([
+            'tv_show_id' => $show->id,
+            'season_number' => 1,
+            'episode_count' => 8,
+            'watched_episodes' => 8,
+        ]);
+
+        Livewire::test('pages::tv-shows')
+            ->set('selectedShowId', $show->id)
+            ->call('incrementWatchedEpisodes', $season->id);
+
+        $this->assertDatabaseHas('tv_show_seasons', [
+            'id' => $season->id,
+            'watched_episodes' => 8,
+        ]);
+    }
+
+    public function test_changing_season_rating_in_edit_mode_below_5_clears_favorite(): void
+    {
+        $this->actingAsUser();
+
+        $show = TvShow::factory()->create();
+        $season = TvShowSeason::factory()->create(['tv_show_id' => $show->id, 'season_number' => 1]);
+
+        Livewire::test('pages::tv-shows')
+            ->call('openEditSeason', $season->id)
+            ->set('seasonRating', '5')
+            ->set('seasonIsFavorite', true)
+            ->set('seasonRating', '4')
+            ->assertSet('seasonIsFavorite', false);
+    }
 }

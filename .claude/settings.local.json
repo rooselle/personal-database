@@ -10,7 +10,9 @@
       "WebSearch",
       "WebFetch(domain:www.themoviedb.org)",
       "Bash(vendor/bin/phpstan analyse *)",
-      "Bash(./vendor/bin/phpunit *)"
+      "Bash(./vendor/bin/phpunit *)",
+      "mcp__laravel-boost__database-schema",
+      "Bash(vendor/bin/sail pint *)"
     ]
   },
   "enableAllProjectMcpServers": true,

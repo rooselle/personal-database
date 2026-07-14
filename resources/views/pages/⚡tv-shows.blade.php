@@ -231,7 +231,7 @@ new class extends Component
         </div>
 
         <flux:modal.trigger name="add-show">
-            <flux:button variant="primary" icon="plus">{{ __('Add show') }}</flux:button>
+            <flux:button variant="primary" icon="plus" class="border-thick! border-hairline! shadow-cutout-sm! hover:-translate-y-0.5 hover:shadow-cutout-md! active:translate-x-0.5 active:translate-y-0.5 active:shadow-cutout-press! transition-all! duration-fast! ease-cocoon!">{{ __('Add show') }}</flux:button>
         </flux:modal.trigger>
     </div>
 
@@ -262,8 +262,8 @@ new class extends Component
     </div>
 
     @if ($displayMode === 'list')
-        <flux:table>
-            <flux:table.columns>
+        <flux:table class="border-thick! border-hairline! shadow-cutout-sm! rounded-lg!">
+            <flux:table.columns class="bg-mustard-100! border-hairline! *:font-bold! *:uppercase! *:tracking-wider! *:text-xs!">
                 <flux:table.column></flux:table.column>
                 <flux:table.column>{{ __('Title') }}</flux:table.column>
                 <flux:table.column>{{ __('Year') }}</flux:table.column>
@@ -285,13 +285,13 @@ new class extends Component
                                     class="h-12 w-8 rounded object-cover shadow-sm"
                                 />
                             @else
-                                <div class="h-12 w-8 rounded bg-rose-100 dark:bg-zinc-700 flex items-center justify-center">
-                                    <flux:icon.tv class="size-4 text-rose-300 dark:text-zinc-500" />
+                                <div class="h-12 w-8 rounded bg-paper-200 flex items-center justify-center">
+                                    <flux:icon.tv class="size-4 text-ink-300" />
                                 </div>
                             @endif
                         </flux:table.cell>
                         <flux:table.cell variant="strong">{{ $show->title }}</flux:table.cell>
-                        <flux:table.cell class="text-sm text-zinc-500 dark:text-zinc-400">
+                        <flux:table.cell class="text-sm text-ink-500">
                             {{ $show->year_released }}
                         </flux:table.cell>
                         <flux:table.cell class="text-sm">
@@ -306,23 +306,23 @@ new class extends Component
                         </flux:table.cell>
                         <flux:table.cell>
                             @if ($show->is_finished)
-                                <flux:badge color="zinc">{{ __('Finished') }}</flux:badge>
+                                <flux:badge color="zinc" class="bg-moss-100! text-moss-600! ring-moss-600/30!">{{ __('Finished') }}</flux:badge>
                             @else
-                                <flux:badge color="lime">{{ __('Ongoing') }}</flux:badge>
+                                <flux:badge color="lime" class="bg-mustard-100! text-mustard-600! ring-mustard-600/30!">{{ __('Ongoing') }}</flux:badge>
                             @endif
                         </flux:table.cell>
                         <flux:table.cell>
                             @if ($show->seasons_count > 0)
                                 <button
                                     wire:click="openSeasons({{ $show->id }})"
-                                    class="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 underline underline-offset-2 transition-colors"
+                                    class="text-sm text-ink-700 hover:text-coral-500 underline underline-offset-2 transition-colors"
                                 >
                                     {{ $show->seasons_count }} {{ $show->seasons_count === 1 ? __('season') : __('seasons') }}
                                 </button>
                             @else
                                 <button
                                     wire:click="openSeasons({{ $show->id }})"
-                                    class="text-sm text-zinc-400 dark:text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
+                                    class="text-sm text-ink-300 hover:text-coral-500 transition-colors"
                                 >
                                     {{ __('Add season') }}
                                 </button>
@@ -335,6 +335,7 @@ new class extends Component
                                 variant="ghost"
                                 size="sm"
                                 icon="trash"
+                                class="hover:text-rust-500!"
                             />
                         </flux:table.cell>
                     </flux:table.row>
@@ -369,55 +370,50 @@ new class extends Component
         @else
             <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
                 @foreach ($this->tvShows as $show)
-                    <div class="group relative flex flex-col rounded-xl overflow-hidden border border-rose-100 dark:border-zinc-700 shadow-sm hover:shadow-md transition-shadow bg-white dark:bg-zinc-800">
-                        <div class="aspect-[2/3] bg-rose-50 dark:bg-zinc-700 relative overflow-hidden">
-                            @if ($show->cover_url)
-                                <img
-                                    src="{{ $show->cover_url }}"
-                                    alt="{{ $show->title }}"
-                                    class="w-full h-full object-cover"
-                                />
-                            @else
-                                <div class="w-full h-full flex flex-col items-center justify-center gap-2">
-                                    <flux:icon.tv class="size-10 text-rose-200 dark:text-zinc-500" />
-                                </div>
-                            @endif
+                    <x-media-card
+                        :title="$show->title"
+                        :meta="implode(', ', $show->creators)"
+                        :cover-url="$show->cover_url"
+                        placeholder-icon="tv"
+                    >
+                        <x-slot:badge>
                             @if ($show->is_finished)
                                 <span class="absolute top-2 right-2 drop-shadow">
-                                    <flux:badge size="sm" color="zinc" variant="solid">{{ __('Finished') }}</flux:badge>
+                                    <flux:badge size="sm" color="zinc" variant="solid" class="bg-moss-600! text-paper-fixed!">{{ __('Finished') }}</flux:badge>
                                 </span>
                             @else
                                 <span class="absolute top-2 right-2 drop-shadow">
-                                    <flux:badge size="sm" color="lime" variant="solid">{{ __('Ongoing') }}</flux:badge>
+                                    <flux:badge size="sm" color="lime" variant="solid" class="bg-mustard-500! text-ink-fixed!">{{ __('Ongoing') }}</flux:badge>
                                 </span>
                             @endif
-                        </div>
-                        <div class="p-2.5 flex flex-col gap-1 flex-1">
-                            <p class="font-semibold text-sm leading-tight line-clamp-2">{{ $show->title }}</p>
-                            <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-tight">{{ implode(', ', $show->creators) }}</p>
-                            <p class="text-xs text-zinc-400 dark:text-zinc-500">{{ $show->year_released }}</p>
+                        </x-slot:badge>
+
+                        <x-slot:delete>
+                            <button
+                                wire:click="deleteShow({{ $show->id }})"
+                                wire:confirm="{{ __('Delete this show and all its seasons?') }}"
+                                class="flex size-6 items-center justify-center rounded-full border-thin border-hairline bg-paper-0 text-ink-500 shadow-cutout-sm hover:text-rust-500"
+                            >
+                                <flux:icon.trash class="size-3.5" />
+                            </button>
+                        </x-slot:delete>
+
+                        <x-slot:footer>
                             <button
                                 wire:click="openSeasons({{ $show->id }})"
-                                class="text-xs text-left mt-auto pt-1 text-rose-500 hover:text-rose-700 dark:hover:text-rose-300 transition-colors"
+                                class="text-left text-xs text-rose-500 transition-colors hover:text-rose-600 dark:hover:text-rose-300"
                             >
                                 {{ $show->seasons_count }} {{ $show->seasons_count === 1 ? __('season') : __('seasons') }}
                             </button>
-                        </div>
-                        <button
-                            wire:click="deleteShow({{ $show->id }})"
-                            wire:confirm="{{ __('Delete this show and all its seasons?') }}"
-                            class="absolute top-2 left-2 size-6 rounded-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-sm flex items-center justify-center text-zinc-400 hover:text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
-                        >
-                            <flux:icon.trash class="size-3.5" />
-                        </button>
-                    </div>
+                        </x-slot:footer>
+                    </x-media-card>
                 @endforeach
             </div>
         @endif
     @endif
 
     {{-- Add Show Modal --}}
-    <flux:modal name="add-show" class="md:w-[34rem]">
+    <flux:modal name="add-show" class="md:w-[34rem] border-thick! border-hairline! shadow-cutout-lg! shadow-overlay-soft!">
         <div class="space-y-6">
             <div>
                 <flux:heading size="lg">{{ __('Add a TV show') }}</flux:heading>
@@ -470,14 +466,14 @@ new class extends Component
                     <flux:modal.close>
                         <flux:button variant="ghost">{{ __('Cancel') }}</flux:button>
                     </flux:modal.close>
-                    <flux:button type="submit" variant="primary">{{ __('Add show') }}</flux:button>
+                    <flux:button type="submit" variant="primary" class="border-thick! border-hairline! shadow-cutout-sm!">{{ __('Add show') }}</flux:button>
                 </div>
             </form>
         </div>
     </flux:modal>
 
     {{-- Seasons Flyout --}}
-    <flux:modal name="show-seasons" flyout class="w-[32rem]">
+    <flux:modal name="show-seasons" flyout class="w-[32rem] border-thick! border-hairline! shadow-cutout-lg! shadow-overlay-soft!">
         @if ($this->selectedShow)
             <div class="flex h-full flex-col gap-6">
 
@@ -487,7 +483,7 @@ new class extends Component
                         <img
                             src="{{ $this->selectedShow->cover_url }}"
                             alt="{{ $this->selectedShow->title }}"
-                            class="h-20 w-14 rounded-lg object-cover shadow-sm shrink-0"
+                            class="h-20 w-14 rounded-lg border-thick border-hairline object-cover shadow-cutout-sm shrink-0"
                         />
                     @endif
                     <div>
@@ -510,16 +506,16 @@ new class extends Component
                         <flux:heading size="sm">{{ __('Seasons') }}</flux:heading>
 
                         @foreach ($this->selectedShow->seasons as $season)
-                            <div class="rounded-lg border border-zinc-200 dark:border-zinc-700 p-3" wire:key="season-{{ $season->id }}">
+                            <div class="rounded-lg border-thick border-hairline bg-paper-0 p-3 shadow-cutout-sm" wire:key="season-{{ $season->id }}">
                                 @if ($editingSeasonId === $season->id)
                                     {{-- Inline edit form --}}
                                     <form wire:submit="updateSeason" class="space-y-3">
-                                        <span class="font-medium text-sm">{{ __('Season') }} {{ $season->season_number }}</span>
+                                        <span class="font-heading font-medium text-sm">{{ __('Season') }} {{ $season->season_number }}</span>
 
                                         <x-season-form-fields :current-rating="$seasonRating" />
 
                                         <div class="flex gap-2">
-                                            <flux:button type="submit" variant="primary" size="sm">{{ __('Save changes') }}</flux:button>
+                                            <flux:button type="submit" variant="primary" size="sm" class="border-thick! border-hairline! shadow-cutout-sm!">{{ __('Save changes') }}</flux:button>
                                             <flux:button wire:click="cancelEditSeason" variant="ghost" size="sm">{{ __('Cancel') }}</flux:button>
                                         </div>
                                     </form>
@@ -528,17 +524,17 @@ new class extends Component
                                     <div class="flex items-start justify-between gap-2">
                                         <div class="space-y-1 flex-1">
                                             <div class="flex items-center gap-2">
-                                                <span class="font-medium text-sm">{{ __('Season') }} {{ $season->season_number }}</span>
+                                                <span class="font-heading font-medium text-sm">{{ __('Season') }} {{ $season->season_number }}</span>
                                                 @if ($season->isFullyWatched())
-                                                    <flux:badge size="sm" color="lime" icon="check">{{ __('Watched') }}</flux:badge>
+                                                    <flux:badge size="sm" color="lime" icon="check" class="bg-moss-100! text-moss-600! ring-moss-600/30!">{{ __('Watched') }}</flux:badge>
                                                 @elseif ($season->watched_episodes > 0)
-                                                    <flux:badge size="sm" color="amber">{{ __('In progress') }}</flux:badge>
+                                                    <flux:badge size="sm" color="amber" class="bg-mustard-100! text-mustard-600! ring-mustard-600/30!">{{ __('In progress') }}</flux:badge>
                                                 @else
                                                     <flux:badge size="sm" color="zinc">{{ __('Not started') }}</flux:badge>
                                                 @endif
                                             </div>
 
-                                            <div class="text-sm text-zinc-500 dark:text-zinc-400">
+                                            <div class="text-sm text-ink-500">
                                                 {{ $season->watched_episodes }}/{{ $season->episode_count }} {{ __('episodes') }}
                                                 @if ($season->episode_count > 0)
                                                     · {{ round(($season->watched_episodes / $season->episode_count) * 100) }}%
@@ -546,14 +542,7 @@ new class extends Component
                                             </div>
 
                                             @if ($season->rating)
-                                                <div class="flex items-center gap-0.5 text-sm leading-none">
-                                                    @for ($i = 1; $i <= 5; $i++)
-                                                        <span class="{{ $i <= $season->rating ? 'text-amber-400' : 'text-zinc-200 dark:text-zinc-700' }}">★</span>
-                                                    @endfor
-                                                    @if ($season->is_favorite)
-                                                        <span class="text-rose-500 ml-1">♥</span>
-                                                    @endif
-                                                </div>
+                                                <x-rating-stars :value="$season->rating" :favorite="$season->is_favorite" size="text-sm" />
                                             @endif
 
                                             @if ($season->comment)
@@ -582,6 +571,7 @@ new class extends Component
                                                 variant="ghost"
                                                 size="sm"
                                                 icon="trash"
+                                                class="hover:text-rust-500!"
                                             />
                                         </div>
                                     </div>
@@ -593,7 +583,7 @@ new class extends Component
 
                 {{-- Add season form --}}
                 @if (! $editingSeasonId)
-                <div class="border-t border-zinc-200 dark:border-zinc-700 pt-4 space-y-4">
+                <div class="border-t border-thick border-hairline pt-4 space-y-4">
                     <flux:heading size="sm">{{ __('Add a season') }}</flux:heading>
 
                     <form wire:submit="saveSeason" class="space-y-4">
@@ -603,7 +593,7 @@ new class extends Component
                             :current-rating="$seasonRating"
                         />
 
-                        <flux:button type="submit" variant="primary" class="w-full">
+                        <flux:button type="submit" variant="primary" class="w-full border-thick! border-hairline! shadow-cutout-sm!">
                             {{ __('Add season') }}
                         </flux:button>
                     </form>

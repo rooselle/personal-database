@@ -3,8 +3,8 @@
     <head>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-white dark:bg-zinc-800">
-        <flux:sidebar sticky collapsible="mobile" class="border-e border-rose-100 bg-rose-50 dark:border-zinc-700 dark:bg-zinc-900">
+    <body class="min-h-screen bg-paper-50">
+        <flux:sidebar sticky collapsible="mobile" class="border-e border-thick border-hairline bg-nav-bg">
             <flux:sidebar.header>
                 <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
                 <flux:sidebar.collapse class="lg:hidden" />
@@ -42,7 +42,7 @@
                 <button
                     type="button"
                     x-on:click="$flux.appearance = $flux.appearance === 'dark' ? 'light' : 'dark'"
-                    class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+                    class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-nav-text transition-colors hover:bg-white/10 hover:text-nav-text-hover"
                 >
                     <flux:icon.sun x-show="$flux.appearance === 'dark'" class="size-5 shrink-0" />
                     <flux:icon.moon x-show="$flux.appearance !== 'dark'" class="size-5 shrink-0" />
@@ -54,18 +54,19 @@
         </flux:sidebar>
 
         <!-- Mobile User Menu -->
-        <flux:header class="lg:hidden">
-            <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
+        <flux:header class="border-thick border-hairline bg-nav-bg lg:hidden">
+            <flux:sidebar.toggle class="text-nav-text! hover:bg-white/10! hover:text-nav-text-hover! lg:hidden" icon="bars-2" inset="left" />
 
             <flux:spacer />
 
-            <flux:button x-data icon="sun" x-show="$flux.appearance === 'dark'" x-on:click="$flux.appearance = 'light'" variant="ghost" size="sm" />
-            <flux:button x-data icon="moon" x-show="$flux.appearance !== 'dark'" x-on:click="$flux.appearance = 'dark'" variant="ghost" size="sm" />
+            <flux:button x-data icon="sun" x-show="$flux.appearance === 'dark'" x-on:click="$flux.appearance = 'light'" variant="ghost" size="sm" class="text-nav-text! hover:bg-white/10! hover:text-nav-text-hover!" />
+            <flux:button x-data icon="moon" x-show="$flux.appearance !== 'dark'" x-on:click="$flux.appearance = 'dark'" variant="ghost" size="sm" class="text-nav-text! hover:bg-white/10! hover:text-nav-text-hover!" />
 
             <flux:dropdown position="top" align="end">
                 <flux:profile
                     :initials="auth()->user()->initials()"
                     icon-trailing="chevron-down"
+                    class="text-nav-text! hover:bg-white/10! hover:text-nav-text-hover!"
                 />
 
                 <flux:menu>

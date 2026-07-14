@@ -8,6 +8,9 @@ services:
         image: 'sail-8.5/app'
         extra_hosts:
             - 'host.docker.internal:host-gateway'
+        dns:
+            - '1.1.1.1'
+            - '8.8.8.8'
         ports:
             - '${APP_PORT:-80}:80'
             - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'

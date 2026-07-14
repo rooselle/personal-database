@@ -12,7 +12,11 @@
       "Bash(vendor/bin/phpstan analyse *)",
       "Bash(./vendor/bin/phpunit *)",
       "mcp__laravel-boost__database-schema",
-      "Bash(vendor/bin/sail pint *)"
+      "Bash(vendor/bin/sail pint *)",
+      "mcp__claude_design__get_project",
+      "mcp__claude_design__list_files",
+      "mcp__claude_design__read_file",
+      "mcp__laravel-boost__browser-logs",
     ]
   },
   "enableAllProjectMcpServers": true,

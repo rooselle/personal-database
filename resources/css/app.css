@@ -9,7 +9,11 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Karla', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-heading: 'Bitter', Georgia, 'Times New Roman', serif;
+    --font-body: 'Karla', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Playwrite FR Moderne', 'Caveat', cursive;
+    --font-hand: 'Caveat', cursive;
 
     --color-zinc-50: #fafafa;
     --color-zinc-100: #f5f5f5;
@@ -23,16 +27,88 @@
     --color-zinc-900: #171717;
     --color-zinc-950: #0a0a0a;
 
-    --color-accent: #9f3a6a;
-    --color-accent-content: #9f3a6a;
-    --color-accent-foreground: var(--color-white);
+    --color-paper-0: #fffdf6;
+    --color-paper-50: #fbf7ec;
+    --color-paper-100: #f5efdf;
+    --color-paper-200: #efe6ce;
+    --color-paper-300: #e4d7b8;
+
+    --color-ink-900: #211a13;
+    --color-ink-700: #4a3f32;
+    --color-ink-500: #7c6f5e;
+    --color-ink-300: #a99c87;
+    --color-ink-100: #d9cdb8;
+
+    --color-coral-600: #c24e34;
+    --color-coral-500: #dd6a46;
+    --color-coral-400: #e68866;
+    --color-coral-100: #f8ddd0;
+
+    --color-teal-900: #16302e;
+    --color-teal-700: #1f4643;
+    --color-teal-500: #2f615d;
+    --color-teal-100: #dceae7;
+
+    --color-mustard-600: #c9922a;
+    --color-mustard-500: #efb63e;
+    --color-mustard-300: #f6d486;
+    --color-mustard-100: #fbf0d4;
+
+    --color-moss-600: #4b6b45;
+    --color-moss-500: #6e8f5f;
+    --color-moss-100: #e4edda;
+
+    --color-rose-50: #faeef0;
+    --color-rose-100: #f5dee2;
+    --color-rose-500: #c06478;
+    --color-rose-600: #a24a5c;
+
+    --color-rust-600: #9c3b2a;
+    --color-rust-500: #bc4a32;
+    --color-rust-100: #f3dcd3;
+
+    --color-rating-filled: var(--color-mustard-600);
+    --color-rating-empty: var(--color-paper-300);
+
+    --color-accent: var(--color-coral-500);
+    --color-accent-content: var(--color-coral-500);
+    --color-accent-foreground: var(--color-paper-0);
+
+    --color-paper-fixed: #fffdf6;
+    --color-ink-fixed: #211a13;
+    --color-nav-bg: var(--color-teal-900);
+    --color-nav-text: #efe6ce;
+    --color-nav-text-hover: #fbf7ec;
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 22px;
+
+    --ease-cocoon: cubic-bezier(.25, .8, .4, 1);
+    --duration-fast: 120ms;
+    --duration-normal: 200ms;
 }
 
 @layer theme {
     .dark {
-        --color-accent: #f0abca;
-        --color-accent-content: #f0abca;
-        --color-accent-foreground: #3d0d22;
+        --color-paper-50: #17211f;
+        --color-paper-0: #1e2926;
+        --color-paper-100: #24312d;
+        --color-paper-200: #14201d;
+
+        --color-ink-900: #f5efdf;
+        --color-ink-700: #d9cdb8;
+        --color-ink-500: #9c9182;
+        --color-ink-300: #6b6255;
+
+        --color-nav-bg: #0f1917;
+
+        --color-accent: #e27856;
+        --color-accent-content: #e27856;
+
+        --color-rating-filled: #efb63e;
+        --color-rating-empty: #33413c;
     }
 }
 
@@ -45,6 +121,101 @@
     ::file-selector-button {
         border-color: var(--color-gray-200, currentColor);
     }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: var(--font-heading);
+    }
+}
+
+@layer utilities {
+    /* "Paper-cutout" hairline border used on cards, buttons, inputs, tables and modals. */
+    .border-hairline {
+        border-color: var(--color-ink-900);
+    }
+
+    .dark .border-hairline {
+        border-color: var(--color-paper-300);
+    }
+
+    .border-thick {
+        border-width: 2.5px;
+    }
+
+    .border-thin {
+        border-width: 1.5px;
+    }
+
+    /* Hard offset "paper-cutout" shadows — no blur, solid ink color. */
+    .shadow-cutout-sm {
+        box-shadow: 3px 3px 0 0 var(--color-ink-900);
+    }
+
+    .dark .shadow-cutout-sm {
+        box-shadow: 3px 3px 0 0 var(--color-paper-300);
+    }
+
+    .shadow-cutout-md {
+        box-shadow: 5px 5px 0 0 var(--color-ink-900);
+    }
+
+    .dark .shadow-cutout-md {
+        box-shadow: 5px 5px 0 0 var(--color-paper-300);
+    }
+
+    .shadow-cutout-lg {
+        box-shadow: 8px 8px 0 0 var(--color-ink-900);
+    }
+
+    .dark .shadow-cutout-lg {
+        box-shadow: 8px 8px 0 0 var(--color-paper-300);
+    }
+
+    .shadow-cutout-press {
+        box-shadow: 2px 2px 0 0 var(--color-ink-900);
+    }
+
+    .dark .shadow-cutout-press {
+        box-shadow: 2px 2px 0 0 var(--color-paper-300);
+    }
+
+    /* Rare soft shadow, layered under a hard shadow for floating overlays (modals). */
+    .shadow-overlay-soft {
+        box-shadow: 0 20px 60px rgba(23, 17, 10, .35);
+    }
+}
+
+/* Sidebar chrome is always dark teal, regardless of the app's light/dark
+   mode — override Flux's neutral-based defaults via its documented
+   data-flux-* hooks (see https://fluxui.dev/docs/customization#global-style-overrides). */
+[data-flux-sidebar-brand] > div:last-child {
+    font-family: var(--font-display);
+    color: var(--color-coral-500);
+}
+
+[data-flux-sidebar-item] {
+    color: var(--color-nav-text);
+}
+
+[data-flux-sidebar-item]:hover {
+    color: var(--color-nav-text-hover);
+}
+
+[data-flux-sidebar-item][data-current] {
+    color: var(--color-coral-400);
+    background-color: rgb(255 255 255 / 8%);
+    border-color: transparent;
+}
+
+[data-flux-sidebar-group] > div:first-child > div {
+    color: var(--color-paper-300);
+}
+
+[data-flux-sidebar-profile] {
+    color: var(--color-nav-text);
+}
+
+[data-flux-sidebar-profile]:hover {
+    color: var(--color-nav-text-hover);
 }
 
 [data-flux-field]:not(ui-radio, ui-checkbox) {
@@ -58,7 +229,7 @@
 input:focus[data-flux-control],
 textarea:focus[data-flux-control],
 select:focus[data-flux-control] {
-    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
+    @apply outline-hidden ring-2 ring-teal-500 ring-offset-2 ring-offset-paper-50;
 }
 
 /* \[:where(&)\]:size-4 {

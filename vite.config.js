@@ -15,8 +15,17 @@ export default defineConfig({
             ],
             refresh: true,
             fonts: [
-                bunny('Instrument Sans', {
-                    weights: [400, 500, 600],
+                bunny('Bitter', {
+                    weights: [400, 500, 600, 700],
+                }),
+                bunny('Karla', {
+                    weights: [400, 500, 600, 700],
+                }),
+                bunny('Caveat', {
+                    weights: [500, 600, 700],
+                }),
+                bunny('Playwrite FR Moderne', {
+                    weights: [400],
                 }),
             ],
         }),

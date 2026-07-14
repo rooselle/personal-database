@@ -57,46 +57,36 @@ new #[Title('Dashboard')] class extends Component
 
     {{-- Books section --}}
     <div>
-        <flux:heading size="lg" class="mb-3 flex items-center gap-2">
-            <flux:icon.book-open class="size-5 text-accent" />
+        <flux:heading size="lg" class="mb-3 flex items-center gap-2 font-heading">
+            <flux:icon.book-open class="size-5 text-coral-500" />
             {{ __('Books') }}
         </flux:heading>
 
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div class="rounded-xl border border-neutral-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-                <flux:text size="sm" class="text-neutral-500 dark:text-zinc-400">{{ __('This year') }}</flux:text>
-                <p class="mt-1 text-3xl font-bold text-neutral-900 dark:text-zinc-100">{{ $this->stats['books']['this_year'] }}</p>
-                <flux:text size="xs" class="mt-1 text-neutral-400 dark:text-zinc-500">{{ now()->year }}</flux:text>
-            </div>
-            <div class="rounded-xl border border-neutral-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-                <flux:text size="sm" class="text-neutral-500 dark:text-zinc-400">{{ __('Last year') }}</flux:text>
-                <p class="mt-1 text-3xl font-bold text-neutral-900 dark:text-zinc-100">{{ $this->stats['books']['last_year'] }}</p>
-                <flux:text size="xs" class="mt-1 text-neutral-400 dark:text-zinc-500">{{ now()->subYear()->year }}</flux:text>
-            </div>
-            <div class="rounded-xl border border-neutral-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-                <flux:text size="sm" class="text-neutral-500 dark:text-zinc-400">{{ __('All time') }}</flux:text>
-                <p class="mt-1 text-3xl font-bold text-neutral-900 dark:text-zinc-100">{{ $this->stats['books']['total'] }}</p>
-                <flux:text size="xs" class="mt-1 text-neutral-400 dark:text-zinc-500">
-                    ★ {{ $this->stats['books']['avg_rating'] ?: '—' }} &nbsp;·&nbsp; {{ $this->stats['books']['favorites'] }} {{ __('favourites') }}
-                </flux:text>
-            </div>
-            <div class="rounded-xl border border-neutral-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-                <flux:text size="sm" class="text-neutral-500 dark:text-zinc-400">{{ __('Per year') }}</flux:text>
+            <x-stat-tile :label="__('This year')" :value="$this->stats['books']['this_year']" :sub="(string) now()->year" />
+            <x-stat-tile :label="__('Last year')" :value="$this->stats['books']['last_year']" :sub="(string) now()->subYear()->year" />
+            <x-stat-tile
+                :label="__('All time')"
+                :value="$this->stats['books']['total']"
+                :sub="'★ '.($this->stats['books']['avg_rating'] ?: '—').' · '.$this->stats['books']['favorites'].' '.__('favourites')"
+            />
+            <div class="rounded-lg border-thick border-hairline bg-paper-0 p-5 shadow-cutout-sm">
+                <flux:text size="sm" class="font-semibold text-ink-500">{{ __('Per year') }}</flux:text>
                 @if(count($this->stats['books']['by_year']))
                     @php $maxBooks = max($this->stats['books']['by_year']); @endphp
                     <div class="mt-2 flex items-end gap-1">
                         @foreach($this->stats['books']['by_year'] as $year => $count)
                             <div class="relative flex flex-1 flex-col items-center gap-0.5">
                                 <div
-                                    class="w-full rounded-sm bg-accent/70 transition-colors hover:bg-accent"
+                                    class="w-full rounded-sm bg-coral-400 transition-colors hover:bg-coral-500"
                                     style="height: {{ $maxBooks > 0 ? round(($count / $maxBooks) * 36) : 0 }}px"
                                 ></div>
-                                <span class="text-[9px] text-neutral-400 dark:text-zinc-500">{{ substr($year, 2) }}</span>
+                                <span class="text-[9px] text-ink-300">{{ substr($year, 2) }}</span>
                             </div>
                         @endforeach
                     </div>
                 @else
-                    <p class="mt-2 text-sm text-neutral-400">—</p>
+                    <p class="mt-2 text-sm text-ink-300">—</p>
                 @endif
             </div>
         </div>
@@ -104,46 +94,36 @@ new #[Title('Dashboard')] class extends Component
 
     {{-- Movies section --}}
     <div>
-        <flux:heading size="lg" class="mb-3 flex items-center gap-2">
-            <flux:icon.film class="size-5 text-accent" />
+        <flux:heading size="lg" class="mb-3 flex items-center gap-2 font-heading">
+            <flux:icon.film class="size-5 text-teal-700 dark:text-teal-500" />
             {{ __('Movies') }}
         </flux:heading>
 
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div class="rounded-xl border border-neutral-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-                <flux:text size="sm" class="text-neutral-500 dark:text-zinc-400">{{ __('This year') }}</flux:text>
-                <p class="mt-1 text-3xl font-bold text-neutral-900 dark:text-zinc-100">{{ $this->stats['movies']['this_year'] }}</p>
-                <flux:text size="xs" class="mt-1 text-neutral-400 dark:text-zinc-500">{{ now()->year }}</flux:text>
-            </div>
-            <div class="rounded-xl border border-neutral-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-                <flux:text size="sm" class="text-neutral-500 dark:text-zinc-400">{{ __('Last year') }}</flux:text>
-                <p class="mt-1 text-3xl font-bold text-neutral-900 dark:text-zinc-100">{{ $this->stats['movies']['last_year'] }}</p>
-                <flux:text size="xs" class="mt-1 text-neutral-400 dark:text-zinc-500">{{ now()->subYear()->year }}</flux:text>
-            </div>
-            <div class="rounded-xl border border-neutral-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-                <flux:text size="sm" class="text-neutral-500 dark:text-zinc-400">{{ __('All time') }}</flux:text>
-                <p class="mt-1 text-3xl font-bold text-neutral-900 dark:text-zinc-100">{{ $this->stats['movies']['total'] }}</p>
-                <flux:text size="xs" class="mt-1 text-neutral-400 dark:text-zinc-500">
-                    ★ {{ $this->stats['movies']['avg_rating'] ?: '—' }} &nbsp;·&nbsp; {{ $this->stats['movies']['favorites'] }} {{ __('favourites') }}
-                </flux:text>
-            </div>
-            <div class="rounded-xl border border-neutral-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-                <flux:text size="sm" class="text-neutral-500 dark:text-zinc-400">{{ __('Per year') }}</flux:text>
+            <x-stat-tile :label="__('This year')" :value="$this->stats['movies']['this_year']" :sub="(string) now()->year" />
+            <x-stat-tile :label="__('Last year')" :value="$this->stats['movies']['last_year']" :sub="(string) now()->subYear()->year" />
+            <x-stat-tile
+                :label="__('All time')"
+                :value="$this->stats['movies']['total']"
+                :sub="'★ '.($this->stats['movies']['avg_rating'] ?: '—').' · '.$this->stats['movies']['favorites'].' '.__('favourites')"
+            />
+            <div class="rounded-lg border-thick border-hairline bg-paper-0 p-5 shadow-cutout-sm">
+                <flux:text size="sm" class="font-semibold text-ink-500">{{ __('Per year') }}</flux:text>
                 @if(count($this->stats['movies']['by_year']))
                     @php $maxMovies = max($this->stats['movies']['by_year']); @endphp
                     <div class="mt-2 flex items-end gap-1">
                         @foreach($this->stats['movies']['by_year'] as $year => $count)
                             <div class="relative flex flex-1 flex-col items-center gap-0.5">
                                 <div
-                                    class="w-full rounded-sm bg-accent/70 transition-colors hover:bg-accent"
+                                    class="w-full rounded-sm bg-teal-500 transition-colors hover:bg-teal-700"
                                     style="height: {{ $maxMovies > 0 ? round(($count / $maxMovies) * 36) : 0 }}px"
                                 ></div>
-                                <span class="text-[9px] text-neutral-400 dark:text-zinc-500">{{ substr($year, 2) }}</span>
+                                <span class="text-[9px] text-ink-300">{{ substr($year, 2) }}</span>
                             </div>
                         @endforeach
                     </div>
                 @else
-                    <p class="mt-2 text-sm text-neutral-400">—</p>
+                    <p class="mt-2 text-sm text-ink-300">—</p>
                 @endif
             </div>
         </div>
@@ -151,32 +131,16 @@ new #[Title('Dashboard')] class extends Component
 
     {{-- TV Shows section --}}
     <div>
-        <flux:heading size="lg" class="mb-3 flex items-center gap-2">
-            <flux:icon.tv class="size-5 text-accent" />
+        <flux:heading size="lg" class="mb-3 flex items-center gap-2 font-heading">
+            <flux:icon.tv class="size-5 text-mustard-600 dark:text-mustard-500" />
             {{ __('TV Shows') }}
         </flux:heading>
 
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <div class="rounded-xl border border-neutral-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-                <flux:text size="sm" class="text-neutral-500 dark:text-zinc-400">{{ __('Shows tracked') }}</flux:text>
-                <p class="mt-1 text-3xl font-bold text-neutral-900 dark:text-zinc-100">{{ $this->stats['tv_shows']['total'] }}</p>
-                <flux:text size="xs" class="mt-1 text-neutral-400 dark:text-zinc-500">{{ __('all time') }}</flux:text>
-            </div>
-            <div class="rounded-xl border border-neutral-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-                <flux:text size="sm" class="text-neutral-500 dark:text-zinc-400">{{ __('Completed') }}</flux:text>
-                <p class="mt-1 text-3xl font-bold text-neutral-900 dark:text-zinc-100">{{ $this->stats['tv_shows']['completed'] }}</p>
-                <flux:text size="xs" class="mt-1 text-neutral-400 dark:text-zinc-500">{{ __('shows finished') }}</flux:text>
-            </div>
-            <div class="rounded-xl border border-neutral-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-                <flux:text size="sm" class="text-neutral-500 dark:text-zinc-400">{{ __('Seasons') }}</flux:text>
-                <p class="mt-1 text-3xl font-bold text-neutral-900 dark:text-zinc-100">{{ $this->stats['tv_shows']['seasons'] }}</p>
-                <flux:text size="xs" class="mt-1 text-neutral-400 dark:text-zinc-500">{{ __('across all shows') }}</flux:text>
-            </div>
-            <div class="rounded-xl border border-neutral-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
-                <flux:text size="sm" class="text-neutral-500 dark:text-zinc-400">{{ __('Average rating') }}</flux:text>
-                <p class="mt-1 text-3xl font-bold text-neutral-900 dark:text-zinc-100">{{ $this->stats['tv_shows']['avg_rating'] ?: '—' }}</p>
-                <flux:text size="xs" class="mt-1 text-neutral-400 dark:text-zinc-500">{{ __('per season') }}</flux:text>
-            </div>
+            <x-stat-tile :label="__('Shows tracked')" :value="$this->stats['tv_shows']['total']" :sub="__('all time')" />
+            <x-stat-tile :label="__('Completed')" :value="$this->stats['tv_shows']['completed']" :sub="__('shows finished')" />
+            <x-stat-tile :label="__('Seasons')" :value="$this->stats['tv_shows']['seasons']" :sub="__('across all shows')" />
+            <x-stat-tile :label="__('Average rating')" :value="$this->stats['tv_shows']['avg_rating'] ?: '—'" :sub="__('per season')" />
         </div>
     </div>
 

@@ -101,7 +101,7 @@ new class extends Component
         </div>
 
         <flux:modal.trigger name="add-book">
-            <flux:button variant="primary" icon="plus">{{ __('Add book') }}</flux:button>
+            <flux:button variant="primary" icon="plus" class="border-thick! border-hairline! shadow-cutout-sm! hover:-translate-y-0.5 hover:shadow-cutout-md! active:translate-x-0.5 active:translate-y-0.5 active:shadow-cutout-press! transition-all! duration-fast! ease-cocoon!">{{ __('Add book') }}</flux:button>
         </flux:modal.trigger>
     </div>
 
@@ -132,8 +132,8 @@ new class extends Component
     </div>
 
     @if ($displayMode === 'list')
-        <flux:table>
-            <flux:table.columns>
+        <flux:table class="border-thick! border-hairline! shadow-cutout-sm! rounded-lg!">
+            <flux:table.columns class="bg-mustard-100! border-hairline! *:font-bold! *:uppercase! *:tracking-wider! *:text-xs!">
                 <flux:table.column></flux:table.column>
                 <flux:table.column>{{ __('Finished on') }}</flux:table.column>
                 <flux:table.column>{{ __('Title') }}</flux:table.column>
@@ -156,29 +156,22 @@ new class extends Component
                                     class="h-12 w-8 rounded object-cover shadow-sm"
                                 />
                             @else
-                                <div class="h-12 w-8 rounded bg-rose-100 dark:bg-zinc-700 flex items-center justify-center">
-                                    <flux:icon.book-open class="size-4 text-rose-300 dark:text-zinc-500" />
+                                <div class="h-12 w-8 rounded bg-paper-200 flex items-center justify-center">
+                                    <flux:icon.book-open class="size-4 text-ink-300" />
                                 </div>
                             @endif
                         </flux:table.cell>
-                        <flux:table.cell class="text-sm text-zinc-500 dark:text-zinc-400 whitespace-nowrap">
+                        <flux:table.cell class="text-sm text-ink-500 whitespace-nowrap">
                             {{ $book->finished_at->format('d/m/Y') }}
                         </flux:table.cell>
                         <flux:table.cell variant="strong">{{ $book->title }}</flux:table.cell>
                         <flux:table.cell>{{ $book->author }}</flux:table.cell>
-                        <flux:table.cell class="text-sm text-zinc-500 dark:text-zinc-400">
+                        <flux:table.cell class="text-sm text-ink-500">
                             {{ $book->year_published }}
                         </flux:table.cell>
                         <flux:table.cell class="text-sm">{{ $book->publisher }}</flux:table.cell>
                         <flux:table.cell>
-                            <div class="flex items-center gap-0.5 text-base leading-none">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    <span class="{{ $i <= $book->rating ? 'text-amber-400' : 'text-zinc-200 dark:text-zinc-700' }}">★</span>
-                                @endfor
-                                @if ($book->is_favorite)
-                                    <span class="text-rose-500 ml-1">♥</span>
-                                @endif
-                            </div>
+                            <x-rating-stars :value="$book->rating" :favorite="$book->is_favorite" size="text-base" />
                         </flux:table.cell>
                         <flux:table.cell class="max-w-xs">
                             @if ($book->comment)
@@ -192,6 +185,7 @@ new class extends Component
                                 variant="ghost"
                                 size="sm"
                                 icon="trash"
+                                class="hover:text-rust-500!"
                             />
                         </flux:table.cell>
                     </flux:table.row>
@@ -226,48 +220,34 @@ new class extends Component
         @else
             <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
                 @foreach ($this->books as $book)
-                    <div class="group relative flex flex-col rounded-xl overflow-hidden border border-rose-100 dark:border-zinc-700 shadow-sm hover:shadow-md transition-shadow bg-white dark:bg-zinc-800">
-                        <div class="aspect-[2/3] bg-rose-50 dark:bg-zinc-700 relative overflow-hidden">
-                            @if ($book->cover_url)
-                                <img
-                                    src="{{ $book->cover_url }}"
-                                    alt="{{ $book->title }}"
-                                    class="w-full h-full object-cover"
-                                />
-                            @else
-                                <div class="w-full h-full flex flex-col items-center justify-center gap-2">
-                                    <flux:icon.book-open class="size-10 text-rose-200 dark:text-zinc-500" />
-                                </div>
-                            @endif
-                            @if ($book->is_favorite)
-                                <span class="absolute top-2 right-2 text-rose-500 text-sm drop-shadow">♥</span>
-                            @endif
-                        </div>
-                        <div class="p-2.5 flex flex-col gap-1 flex-1">
-                            <p class="font-semibold text-sm leading-tight line-clamp-2">{{ $book->title }}</p>
-                            <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-tight">{{ $book->author }}</p>
-                            <p class="text-xs text-zinc-400 dark:text-zinc-500">{{ $book->year_published }}</p>
-                            <div class="flex items-center gap-0.5 text-xs leading-none mt-auto pt-1">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    <span class="{{ $i <= $book->rating ? 'text-amber-400' : 'text-zinc-200 dark:text-zinc-700' }}">★</span>
-                                @endfor
-                            </div>
-                        </div>
-                        <button
-                            wire:click="deleteBook({{ $book->id }})"
-                            wire:confirm="{{ __('Delete this book?') }}"
-                            class="absolute top-2 left-2 size-6 rounded-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-sm flex items-center justify-center text-zinc-400 hover:text-rose-500 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
-                        >
-                            <flux:icon.trash class="size-3.5" />
-                        </button>
-                    </div>
+                    <x-media-card
+                        :title="$book->title"
+                        :meta="$book->author"
+                        :cover-url="$book->cover_url"
+                        :favorite="$book->is_favorite"
+                        placeholder-icon="book-open"
+                    >
+                        <x-slot:delete>
+                            <button
+                                wire:click="deleteBook({{ $book->id }})"
+                                wire:confirm="{{ __('Delete this book?') }}"
+                                class="flex size-6 items-center justify-center rounded-full border-thin border-hairline bg-paper-0 text-ink-500 shadow-cutout-sm hover:text-rust-500"
+                            >
+                                <flux:icon.trash class="size-3.5" />
+                            </button>
+                        </x-slot:delete>
+
+                        <x-slot:footer>
+                            <x-rating-stars :value="$book->rating" size="text-xs" />
+                        </x-slot:footer>
+                    </x-media-card>
                 @endforeach
             </div>
         @endif
     @endif
 
     {{-- Add Book Modal --}}
-    <flux:modal name="add-book" class="md:w-[34rem]">
+    <flux:modal name="add-book" class="md:w-[34rem] border-thick! border-hairline! shadow-cutout-lg! shadow-overlay-soft!">
         <div class="space-y-6">
             <div>
                 <flux:heading size="lg">{{ __('Add a book') }}</flux:heading>
@@ -332,7 +312,7 @@ new class extends Component
                     <flux:modal.close>
                         <flux:button variant="ghost">{{ __('Cancel') }}</flux:button>
                     </flux:modal.close>
-                    <flux:button type="submit" variant="primary">{{ __('Add book') }}</flux:button>
+                    <flux:button type="submit" variant="primary" class="border-thick! border-hairline! shadow-cutout-sm!">{{ __('Add book') }}</flux:button>
                 </div>
             </form>
         </div>

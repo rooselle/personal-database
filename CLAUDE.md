@@ -194,13 +194,24 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - Head partial: resources/views/partials/head.blade.php
 - App name/branding in: components/app-logo.blade.php + app-logo-icon.blade.php
 - Dark mode: handled by Flux via @fluxAppearance, toggled in settings/appearance
+- Sidebar chrome is always dark teal regardless of the light/dark toggle — overridden via Flux's `data-flux-sidebar-*` hooks in `resources/css/app.css`
 - Routes: web.php, dashboard requires auth, welcome is public
+
+## CSS / Tailwind
+
+- Custom utility classes in `resources/css/app.css` (e.g. `border-hairline`, `shadow-cutout-*`) must be defined with the `@utility` directive, never a plain rule inside `@layer utilities`. Only `@utility`-registered classes support variants like `hover:`, `dark:`, and the trailing `!` (important) suffix — a bare `.foo {}` in `@layer utilities` is inert to all of those, so `foo!` in markup silently does nothing.
+- A single `box-shadow` declaration can layer multiple shadows (comma-separated), but two separate utility classes each setting `box-shadow` do not stack — the one that wins the cascade fully replaces the other. Combine multi-layer shadows into one utility (see `shadow-modal`).
+- A "complex" `@utility` (one using nesting, e.g. `&:active { }` or `@variant dark { }` inside) does not reliably win the cascade against Flux's own classes even where the equivalent flat/simple utility would — verified empirically (`shadow-cutout-interactive` needed `!` on the same button where plain `shadow-cutout-sm` did not). When in doubt whether a custom utility class needs the `!` suffix on a Flux component, don't guess from theory — toggle the class in a live page via Playwright and diff `getComputedStyle` before/after; this codebase has real, non-obvious asymmetries where some properties on the same element need `!` and others don't.
+- Tailwind v4 does not set `cursor: pointer` on `<button>` by default. Fixed globally via `button:not(:disabled) { cursor: pointer; }` in `app.css` — don't reintroduce this per-component.
+- Shared button styling lives in `<x-cutout-button>` (`resources/views/components/cutout-button.blade.php`), wrapping `<flux:button variant="primary">`. Since `flux:button` renders as an `<a>` when given an `href` prop, this one component covers both Livewire actions and plain navigation links (see its use in `welcome.blade.php`) — always use it instead of restyling a `flux:button` or a raw `<a>` by hand.
+- Shared table styling lives in `<x-data-table>` (`resources/views/components/data-table.blade.php`), wrapping `flux:table` with a `columns` slot and a default slot for rows — use it for any new list-mode table instead of repeating the container/columns/rows override classes.
 
 ## Collaboration
 
 - If the user communicates in French, always reply in French.
 - All code, variable names, comments, and `__()` keys must remain in English.
 - When the user signals approval ("All good", "It's good", "It's perfect", etc. or its French translation), review the conversation for important non-obvious information and save it to memory files and/or this CLAUDE.md if relevant for future sessions.
+- Don't leave comments in CSS/Blade explaining WHAT a block does when the class names or markup already make it obvious. Only keep a comment for a genuinely non-obvious WHY (a hidden constraint, a workaround); if that reasoning is something you need to remember across sessions rather than something a reader of this code needs, put it in memory or here instead of leaving it inline.
 
 ## Translation
 

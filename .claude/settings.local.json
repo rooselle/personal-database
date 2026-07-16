@@ -17,6 +17,7 @@
       "mcp__claude_design__list_files",
       "mcp__claude_design__read_file",
       "mcp__laravel-boost__browser-logs",
+      "mcp__claude_design__render_preview"
     ]
   },
   "enableAllProjectMcpServers": true,

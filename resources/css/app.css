@@ -127,66 +127,80 @@
     }
 }
 
-@layer utilities {
-    /* "Paper-cutout" hairline border used on cards, buttons, inputs, tables and modals. */
-    .border-hairline {
-        border-color: var(--color-ink-900);
-    }
+@utility border-hairline {
+    border-color: var(--color-ink-900);
 
-    .dark .border-hairline {
+    @variant dark {
         border-color: var(--color-paper-300);
-    }
-
-    .border-thick {
-        border-width: 2.5px;
-    }
-
-    .border-thin {
-        border-width: 1.5px;
-    }
-
-    /* Hard offset "paper-cutout" shadows — no blur, solid ink color. */
-    .shadow-cutout-sm {
-        box-shadow: 3px 3px 0 0 var(--color-ink-900);
-    }
-
-    .dark .shadow-cutout-sm {
-        box-shadow: 3px 3px 0 0 var(--color-paper-300);
-    }
-
-    .shadow-cutout-md {
-        box-shadow: 5px 5px 0 0 var(--color-ink-900);
-    }
-
-    .dark .shadow-cutout-md {
-        box-shadow: 5px 5px 0 0 var(--color-paper-300);
-    }
-
-    .shadow-cutout-lg {
-        box-shadow: 8px 8px 0 0 var(--color-ink-900);
-    }
-
-    .dark .shadow-cutout-lg {
-        box-shadow: 8px 8px 0 0 var(--color-paper-300);
-    }
-
-    .shadow-cutout-press {
-        box-shadow: 2px 2px 0 0 var(--color-ink-900);
-    }
-
-    .dark .shadow-cutout-press {
-        box-shadow: 2px 2px 0 0 var(--color-paper-300);
-    }
-
-    /* Rare soft shadow, layered under a hard shadow for floating overlays (modals). */
-    .shadow-overlay-soft {
-        box-shadow: 0 20px 60px rgba(23, 17, 10, .35);
     }
 }
 
-/* Sidebar chrome is always dark teal, regardless of the app's light/dark
-   mode — override Flux's neutral-based defaults via its documented
-   data-flux-* hooks (see https://fluxui.dev/docs/customization#global-style-overrides). */
+@utility border-soft {
+    border-color: var(--color-paper-300);
+
+    @variant dark {
+        border-color: #33413c;
+    }
+}
+
+@utility border-thick {
+    border-width: 2.5px;
+}
+
+@utility border-thin {
+    border-width: 1.5px;
+}
+
+@utility shadow-cutout-sm {
+    box-shadow: 3px 3px 0 0 var(--color-ink-900);
+
+    @variant dark {
+        box-shadow: 3px 3px 0 0 var(--color-paper-300);
+    }
+}
+
+@utility shadow-cutout-md {
+    box-shadow: 5px 5px 0 0 var(--color-ink-900);
+
+    @variant dark {
+        box-shadow: 5px 5px 0 0 var(--color-paper-300);
+    }
+}
+
+@utility shadow-cutout-lg {
+    box-shadow: 8px 8px 0 0 var(--color-ink-900);
+
+    @variant dark {
+        box-shadow: 8px 8px 0 0 var(--color-paper-300);
+    }
+}
+
+@utility shadow-cutout-interactive {
+    box-shadow: 3px 3px 0 0 var(--color-ink-900);
+    transition: box-shadow var(--duration-fast) var(--ease-cocoon), transform var(--duration-fast) var(--ease-cocoon);
+
+    &:active {
+        box-shadow: 2px 2px 0 0 var(--color-ink-900);
+        transform: translate(3px, 3px);
+    }
+
+    @variant dark {
+        box-shadow: 3px 3px 0 0 var(--color-paper-300);
+
+        &:active {
+            box-shadow: 2px 2px 0 0 var(--color-paper-300);
+        }
+    }
+}
+
+@utility shadow-modal {
+    box-shadow: 8px 8px 0 0 var(--color-ink-900), 0 20px 60px rgba(23, 17, 10, .35);
+
+    @variant dark {
+        box-shadow: 8px 8px 0 0 var(--color-paper-300), 0 20px 60px rgba(23, 17, 10, .35);
+    }
+}
+
 [data-flux-sidebar-brand] > div:last-child {
     font-family: var(--font-display);
     color: var(--color-coral-500);
@@ -232,12 +246,11 @@ select:focus[data-flux-control] {
     @apply outline-hidden ring-2 ring-teal-500 ring-offset-2 ring-offset-paper-50;
 }
 
-/* \[:where(&)\]:size-4 {
-    @apply size-4;
-} */
-
-/* Keep the horizontal scrollbar visible in the viewport when the table is long */
 ui-table-scroll-area {
     display: block;
     max-height: calc(100dvh - 14rem);
+}
+
+button:not(:disabled) {
+    cursor: pointer;
 }

@@ -24,7 +24,6 @@
 
         </header>
 
-        {{-- Hero --}}
         <div class="relative h-[70vh] min-h-[420px] overflow-hidden">
             <img
                 src="/images/hero.jpg"
@@ -42,25 +41,18 @@
                         {{ __('Your personal reading & watching journal — a digital home for the books you\'ve read and the shows and films you\'ve watched.') }}
                     </p>
                     @auth
-                        <a
-                            href="{{ route('dashboard') }}"
-                            class="mt-8 inline-block rounded-md border-thick border-hairline bg-coral-500 px-8 py-3 font-heading font-bold text-paper-fixed shadow-cutout-sm transition-all duration-fast ease-cocoon hover:-translate-y-0.5 hover:bg-coral-400 hover:shadow-cutout-md active:translate-x-0.5 active:translate-y-0.5 active:shadow-cutout-press"
-                        >
+                        <x-cutout-button href="{{ route('dashboard') }}" class="mt-8">
                             {{ __('Go to dashboard') }}
-                        </a>
+                        </x-cutout-button>
                     @else
-                        <a
-                            href="{{ route('login') }}"
-                            class="mt-8 inline-block rounded-md border-thick border-hairline bg-coral-500 px-8 py-3 font-heading font-bold text-paper-fixed shadow-cutout-sm transition-all duration-fast ease-cocoon hover:-translate-y-0.5 hover:bg-coral-400 hover:shadow-cutout-md active:translate-x-0.5 active:translate-y-0.5 active:shadow-cutout-press"
-                        >
+                        <x-cutout-button href="{{ route('login') }}" class="mt-8">
                             {{ __('Sign in') }}
-                        </a>
+                        </x-cutout-button>
                     @endauth
                 </div>
             </div>
         </div>
 
-        {{-- Features --}}
         <div class="flex-1 bg-paper-100 px-6 py-16 lg:px-10">
             <div class="max-w-4xl mx-auto grid gap-6 sm:grid-cols-3">
                 <div class="rounded-lg border-thick border-hairline bg-paper-0 p-5 text-center shadow-cutout-sm">

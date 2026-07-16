@@ -101,7 +101,7 @@ new class extends Component
         </div>
 
         <flux:modal.trigger name="add-movie">
-            <flux:button variant="primary" icon="plus" class="border-thick! border-hairline! shadow-cutout-sm! hover:-translate-y-0.5 hover:shadow-cutout-md! active:translate-x-0.5 active:translate-y-0.5 active:shadow-cutout-press! transition-all! duration-fast! ease-cocoon!">{{ __('Add movie') }}</flux:button>
+            <x-cutout-button icon="plus">{{ __('Add movie') }}</x-cutout-button>
         </flux:modal.trigger>
     </div>
 
@@ -132,8 +132,8 @@ new class extends Component
     </div>
 
     @if ($displayMode === 'list')
-        <flux:table class="border-thick! border-hairline! shadow-cutout-sm! rounded-lg!">
-            <flux:table.columns class="bg-mustard-100! border-hairline! *:font-bold! *:uppercase! *:tracking-wider! *:text-xs!">
+        <x-data-table>
+            <x-slot:columns>
                 <flux:table.column></flux:table.column>
                 <flux:table.column>{{ __('Watched on') }}</flux:table.column>
                 <flux:table.column>{{ __('Title') }}</flux:table.column>
@@ -143,77 +143,75 @@ new class extends Component
                 <flux:table.column>{{ __('Rating') }}</flux:table.column>
                 <flux:table.column>{{ __('Comment') }}</flux:table.column>
                 <flux:table.column></flux:table.column>
-            </flux:table.columns>
+            </x-slot:columns>
 
-            <flux:table.rows>
-                @forelse ($this->movies as $movie)
-                    <flux:table.row :key="$movie->id">
-                        <flux:table.cell class="w-10 pr-0">
-                            @if ($movie->cover_url)
-                                <img
-                                    src="{{ $movie->cover_url }}"
-                                    alt="{{ $movie->title }}"
-                                    class="h-12 w-8 rounded object-cover shadow-sm"
-                                />
-                            @else
-                                <div class="h-12 w-8 rounded bg-paper-200 flex items-center justify-center">
-                                    <flux:icon.film class="size-4 text-ink-300" />
-                                </div>
-                            @endif
-                        </flux:table.cell>
-                        <flux:table.cell class="text-sm text-ink-500 whitespace-nowrap">
-                            {{ $movie->finished_at->format('d/m/Y') }}
-                        </flux:table.cell>
-                        <flux:table.cell variant="strong">{{ $movie->title }}</flux:table.cell>
-                        <flux:table.cell class="text-sm text-ink-500">
-                            {{ $movie->year_released }}
-                        </flux:table.cell>
-                        <flux:table.cell class="text-sm">
-                            {{ implode(', ', $movie->directors) }}
-                        </flux:table.cell>
-                        <flux:table.cell>
-                            <div class="flex flex-wrap gap-1">
-                                @foreach ($movie->genres as $genre)
-                                    <flux:badge size="sm" color="zinc">{{ $genre }}</flux:badge>
-                                @endforeach
-                            </div>
-                        </flux:table.cell>
-                        <flux:table.cell>
-                            <x-rating-stars :value="$movie->rating" :favorite="$movie->is_favorite" size="text-base" />
-                        </flux:table.cell>
-                        <flux:table.cell class="max-w-xs">
-                            @if ($movie->comment)
-                                <flux:text class="text-sm truncate">{{ $movie->comment }}</flux:text>
-                            @endif
-                        </flux:table.cell>
-                        <flux:table.cell>
-                            <flux:button
-                                wire:click="deleteMovie({{ $movie->id }})"
-                                wire:confirm="{{ __('Delete this movie?') }}"
-                                variant="ghost"
-                                size="sm"
-                                icon="trash"
-                                class="hover:text-rust-500!"
+            @forelse ($this->movies as $movie)
+                <flux:table.row :key="$movie->id">
+                    <flux:table.cell class="w-10 pr-0">
+                        @if ($movie->cover_url)
+                            <img
+                                src="{{ $movie->cover_url }}"
+                                alt="{{ $movie->title }}"
+                                class="h-12 w-8 rounded object-cover shadow-sm"
                             />
-                        </flux:table.cell>
-                    </flux:table.row>
-                @empty
-                    <flux:table.row>
-                        <flux:table.cell colspan="9">
-                            <div class="py-12 text-center">
-                                <flux:text>
-                                    @if ($search)
-                                        {{ __('No movies found matching') }} "{{ $search }}".
-                                    @else
-                                        {{ __('No movies yet. Add your first movie!') }}
-                                    @endif
-                                </flux:text>
+                        @else
+                            <div class="h-12 w-8 rounded bg-paper-200 flex items-center justify-center">
+                                <flux:icon.film class="size-4 text-ink-300" />
                             </div>
-                        </flux:table.cell>
-                    </flux:table.row>
-                @endforelse
-            </flux:table.rows>
-        </flux:table>
+                        @endif
+                    </flux:table.cell>
+                    <flux:table.cell class="text-sm text-ink-500 whitespace-nowrap">
+                        {{ $movie->finished_at->format('d/m/Y') }}
+                    </flux:table.cell>
+                    <flux:table.cell variant="strong">{{ $movie->title }}</flux:table.cell>
+                    <flux:table.cell class="text-sm text-ink-500">
+                        {{ $movie->year_released }}
+                    </flux:table.cell>
+                    <flux:table.cell class="text-sm">
+                        {{ implode(', ', $movie->directors) }}
+                    </flux:table.cell>
+                    <flux:table.cell>
+                        <div class="flex flex-wrap gap-1">
+                            @foreach ($movie->genres as $genre)
+                                <flux:badge size="sm" color="zinc">{{ $genre }}</flux:badge>
+                            @endforeach
+                        </div>
+                    </flux:table.cell>
+                    <flux:table.cell>
+                        <x-rating-stars :value="$movie->rating" :favorite="$movie->is_favorite" size="text-base" />
+                    </flux:table.cell>
+                    <flux:table.cell class="max-w-xs">
+                        @if ($movie->comment)
+                            <flux:text class="text-sm truncate">{{ $movie->comment }}</flux:text>
+                        @endif
+                    </flux:table.cell>
+                    <flux:table.cell>
+                        <flux:button
+                            wire:click="deleteMovie({{ $movie->id }})"
+                            wire:confirm="{{ __('Delete this movie?') }}"
+                            variant="ghost"
+                            size="sm"
+                            icon="trash"
+                            class="hover:text-rust-500!"
+                        />
+                    </flux:table.cell>
+                </flux:table.row>
+            @empty
+                <flux:table.row>
+                    <flux:table.cell colspan="9">
+                        <div class="py-12 text-center">
+                            <flux:text>
+                                @if ($search)
+                                    {{ __('No movies found matching') }} "{{ $search }}".
+                                @else
+                                    {{ __('No movies yet. Add your first movie!') }}
+                                @endif
+                            </flux:text>
+                        </div>
+                    </flux:table.cell>
+                </flux:table.row>
+            @endforelse
+        </x-data-table>
     @else
         @if ($this->movies->isEmpty())
             <div class="py-16 text-center">
@@ -254,8 +252,7 @@ new class extends Component
         @endif
     @endif
 
-    {{-- Add Movie Modal --}}
-    <flux:modal name="add-movie" class="md:w-[34rem] border-thick! border-hairline! shadow-cutout-lg! shadow-overlay-soft!">
+    <flux:modal name="add-movie" class="md:w-[34rem] rounded-lg border-thick border-hairline bg-paper-0 shadow-modal">
         <div class="space-y-6">
             <div>
                 <flux:heading size="lg">{{ __('Add a movie') }}</flux:heading>
@@ -325,9 +322,9 @@ new class extends Component
 
                 <div class="flex justify-end gap-2 pt-2">
                     <flux:modal.close>
-                        <flux:button variant="ghost">{{ __('Cancel') }}</flux:button>
+                        <flux:button variant="ghost" class="font-bold!">{{ __('Cancel') }}</flux:button>
                     </flux:modal.close>
-                    <flux:button type="submit" variant="primary" class="border-thick! border-hairline! shadow-cutout-sm!">{{ __('Add movie') }}</flux:button>
+                    <x-cutout-button type="submit">{{ __('Add movie') }}</x-cutout-button>
                 </div>
             </form>
         </div>

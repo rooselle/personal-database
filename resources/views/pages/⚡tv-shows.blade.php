@@ -231,7 +231,7 @@ new class extends Component
         </div>
 
         <flux:modal.trigger name="add-show">
-            <flux:button variant="primary" icon="plus" class="border-thick! border-hairline! shadow-cutout-sm! hover:-translate-y-0.5 hover:shadow-cutout-md! active:translate-x-0.5 active:translate-y-0.5 active:shadow-cutout-press! transition-all! duration-fast! ease-cocoon!">{{ __('Add show') }}</flux:button>
+            <x-cutout-button icon="plus">{{ __('Add show') }}</x-cutout-button>
         </flux:modal.trigger>
     </div>
 
@@ -262,8 +262,8 @@ new class extends Component
     </div>
 
     @if ($displayMode === 'list')
-        <flux:table class="border-thick! border-hairline! shadow-cutout-sm! rounded-lg!">
-            <flux:table.columns class="bg-mustard-100! border-hairline! *:font-bold! *:uppercase! *:tracking-wider! *:text-xs!">
+        <x-data-table>
+            <x-slot:columns>
                 <flux:table.column></flux:table.column>
                 <flux:table.column>{{ __('Title') }}</flux:table.column>
                 <flux:table.column>{{ __('Year') }}</flux:table.column>
@@ -272,90 +272,88 @@ new class extends Component
                 <flux:table.column>{{ __('Status') }}</flux:table.column>
                 <flux:table.column>{{ __('Seasons') }}</flux:table.column>
                 <flux:table.column></flux:table.column>
-            </flux:table.columns>
+            </x-slot:columns>
 
-            <flux:table.rows>
-                @forelse ($this->tvShows as $show)
-                    <flux:table.row :key="$show->id">
-                        <flux:table.cell class="w-10 pr-0">
-                            @if ($show->cover_url)
-                                <img
-                                    src="{{ $show->cover_url }}"
-                                    alt="{{ $show->title }}"
-                                    class="h-12 w-8 rounded object-cover shadow-sm"
-                                />
-                            @else
-                                <div class="h-12 w-8 rounded bg-paper-200 flex items-center justify-center">
-                                    <flux:icon.tv class="size-4 text-ink-300" />
-                                </div>
-                            @endif
-                        </flux:table.cell>
-                        <flux:table.cell variant="strong">{{ $show->title }}</flux:table.cell>
-                        <flux:table.cell class="text-sm text-ink-500">
-                            {{ $show->year_released }}
-                        </flux:table.cell>
-                        <flux:table.cell class="text-sm">
-                            {{ implode(', ', $show->creators) }}
-                        </flux:table.cell>
-                        <flux:table.cell>
-                            <div class="flex flex-wrap gap-1">
-                                @foreach ($show->genres as $genre)
-                                    <flux:badge size="sm" color="zinc">{{ $genre }}</flux:badge>
-                                @endforeach
-                            </div>
-                        </flux:table.cell>
-                        <flux:table.cell>
-                            @if ($show->is_finished)
-                                <flux:badge color="zinc" class="bg-moss-100! text-moss-600! ring-moss-600/30!">{{ __('Finished') }}</flux:badge>
-                            @else
-                                <flux:badge color="lime" class="bg-mustard-100! text-mustard-600! ring-mustard-600/30!">{{ __('Ongoing') }}</flux:badge>
-                            @endif
-                        </flux:table.cell>
-                        <flux:table.cell>
-                            @if ($show->seasons_count > 0)
-                                <button
-                                    wire:click="openSeasons({{ $show->id }})"
-                                    class="text-sm text-ink-700 hover:text-coral-500 underline underline-offset-2 transition-colors"
-                                >
-                                    {{ $show->seasons_count }} {{ $show->seasons_count === 1 ? __('season') : __('seasons') }}
-                                </button>
-                            @else
-                                <button
-                                    wire:click="openSeasons({{ $show->id }})"
-                                    class="text-sm text-ink-300 hover:text-coral-500 transition-colors"
-                                >
-                                    {{ __('Add season') }}
-                                </button>
-                            @endif
-                        </flux:table.cell>
-                        <flux:table.cell>
-                            <flux:button
-                                wire:click="deleteShow({{ $show->id }})"
-                                wire:confirm="{{ __('Delete this show and all its seasons?') }}"
-                                variant="ghost"
-                                size="sm"
-                                icon="trash"
-                                class="hover:text-rust-500!"
+            @forelse ($this->tvShows as $show)
+                <flux:table.row :key="$show->id">
+                    <flux:table.cell class="w-10 pr-0">
+                        @if ($show->cover_url)
+                            <img
+                                src="{{ $show->cover_url }}"
+                                alt="{{ $show->title }}"
+                                class="h-12 w-8 rounded object-cover shadow-sm"
                             />
-                        </flux:table.cell>
-                    </flux:table.row>
-                @empty
-                    <flux:table.row>
-                        <flux:table.cell colspan="8">
-                            <div class="py-12 text-center">
-                                <flux:text>
-                                    @if ($search)
-                                        {{ __('No shows found matching') }} "{{ $search }}".
-                                    @else
-                                        {{ __('No TV shows yet. Add your first show!') }}
-                                    @endif
-                                </flux:text>
+                        @else
+                            <div class="h-12 w-8 rounded bg-paper-200 flex items-center justify-center">
+                                <flux:icon.tv class="size-4 text-ink-300" />
                             </div>
-                        </flux:table.cell>
-                    </flux:table.row>
-                @endforelse
-            </flux:table.rows>
-        </flux:table>
+                        @endif
+                    </flux:table.cell>
+                    <flux:table.cell variant="strong">{{ $show->title }}</flux:table.cell>
+                    <flux:table.cell class="text-sm text-ink-500">
+                        {{ $show->year_released }}
+                    </flux:table.cell>
+                    <flux:table.cell class="text-sm">
+                        {{ implode(', ', $show->creators) }}
+                    </flux:table.cell>
+                    <flux:table.cell>
+                        <div class="flex flex-wrap gap-1">
+                            @foreach ($show->genres as $genre)
+                                <flux:badge size="sm" color="zinc">{{ $genre }}</flux:badge>
+                            @endforeach
+                        </div>
+                    </flux:table.cell>
+                    <flux:table.cell>
+                        @if ($show->is_finished)
+                            <flux:badge color="zinc" class="bg-moss-100! text-moss-600! ring-moss-600/30!">{{ __('Finished') }}</flux:badge>
+                        @else
+                            <flux:badge color="lime" class="bg-mustard-100! text-mustard-600! ring-mustard-600/30!">{{ __('Ongoing') }}</flux:badge>
+                        @endif
+                    </flux:table.cell>
+                    <flux:table.cell>
+                        @if ($show->seasons_count > 0)
+                            <button
+                                wire:click="openSeasons({{ $show->id }})"
+                                class="text-sm text-ink-700 hover:text-coral-500 underline underline-offset-2 transition-colors"
+                            >
+                                {{ $show->seasons_count }} {{ $show->seasons_count === 1 ? __('season') : __('seasons') }}
+                            </button>
+                        @else
+                            <button
+                                wire:click="openSeasons({{ $show->id }})"
+                                class="text-sm text-ink-300 hover:text-coral-500 transition-colors"
+                            >
+                                {{ __('Add season') }}
+                            </button>
+                        @endif
+                    </flux:table.cell>
+                    <flux:table.cell>
+                        <flux:button
+                            wire:click="deleteShow({{ $show->id }})"
+                            wire:confirm="{{ __('Delete this show and all its seasons?') }}"
+                            variant="ghost"
+                            size="sm"
+                            icon="trash"
+                            class="hover:text-rust-500!"
+                        />
+                    </flux:table.cell>
+                </flux:table.row>
+            @empty
+                <flux:table.row>
+                    <flux:table.cell colspan="8">
+                        <div class="py-12 text-center">
+                            <flux:text>
+                                @if ($search)
+                                    {{ __('No shows found matching') }} "{{ $search }}".
+                                @else
+                                    {{ __('No TV shows yet. Add your first show!') }}
+                                @endif
+                            </flux:text>
+                        </div>
+                    </flux:table.cell>
+                </flux:table.row>
+            @endforelse
+        </x-data-table>
     @else
         @if ($this->tvShows->isEmpty())
             <div class="py-16 text-center">
@@ -412,8 +410,7 @@ new class extends Component
         @endif
     @endif
 
-    {{-- Add Show Modal --}}
-    <flux:modal name="add-show" class="md:w-[34rem] border-thick! border-hairline! shadow-cutout-lg! shadow-overlay-soft!">
+    <flux:modal name="add-show" class="md:w-[34rem] rounded-lg border-thick border-hairline bg-paper-0 shadow-modal">
         <div class="space-y-6">
             <div>
                 <flux:heading size="lg">{{ __('Add a TV show') }}</flux:heading>
@@ -464,20 +461,18 @@ new class extends Component
 
                 <div class="flex justify-end gap-2 pt-2">
                     <flux:modal.close>
-                        <flux:button variant="ghost">{{ __('Cancel') }}</flux:button>
+                        <flux:button variant="ghost" class="font-bold!">{{ __('Cancel') }}</flux:button>
                     </flux:modal.close>
-                    <flux:button type="submit" variant="primary" class="border-thick! border-hairline! shadow-cutout-sm!">{{ __('Add show') }}</flux:button>
+                    <x-cutout-button type="submit">{{ __('Add show') }}</x-cutout-button>
                 </div>
             </form>
         </div>
     </flux:modal>
 
-    {{-- Seasons Flyout --}}
-    <flux:modal name="show-seasons" flyout class="w-[32rem] border-thick! border-hairline! shadow-cutout-lg! shadow-overlay-soft!">
+    <flux:modal name="show-seasons" flyout class="w-[32rem] border-thick border-hairline bg-paper-0 shadow-modal">
         @if ($this->selectedShow)
             <div class="flex h-full flex-col gap-6">
 
-                {{-- Show header --}}
                 <div class="flex gap-4">
                     @if ($this->selectedShow->cover_url)
                         <img
@@ -500,7 +495,6 @@ new class extends Component
                     </div>
                 </div>
 
-                {{-- Seasons list --}}
                 @if ($this->selectedShow->seasons->isNotEmpty())
                     <div class="space-y-3">
                         <flux:heading size="sm">{{ __('Seasons') }}</flux:heading>
@@ -508,19 +502,17 @@ new class extends Component
                         @foreach ($this->selectedShow->seasons as $season)
                             <div class="rounded-lg border-thick border-hairline bg-paper-0 p-3 shadow-cutout-sm" wire:key="season-{{ $season->id }}">
                                 @if ($editingSeasonId === $season->id)
-                                    {{-- Inline edit form --}}
                                     <form wire:submit="updateSeason" class="space-y-3">
                                         <span class="font-heading font-medium text-sm">{{ __('Season') }} {{ $season->season_number }}</span>
 
                                         <x-season-form-fields :current-rating="$seasonRating" />
 
                                         <div class="flex gap-2">
-                                            <flux:button type="submit" variant="primary" size="sm" class="border-thick! border-hairline! shadow-cutout-sm!">{{ __('Save changes') }}</flux:button>
-                                            <flux:button wire:click="cancelEditSeason" variant="ghost" size="sm">{{ __('Cancel') }}</flux:button>
+                                            <x-cutout-button type="submit" size="sm">{{ __('Save changes') }}</x-cutout-button>
+                                            <flux:button wire:click="cancelEditSeason" variant="ghost" size="sm" class="font-bold!">{{ __('Cancel') }}</flux:button>
                                         </div>
                                     </form>
                                 @else
-                                    {{-- Normal display --}}
                                     <div class="flex items-start justify-between gap-2">
                                         <div class="space-y-1 flex-1">
                                             <div class="flex items-center gap-2">
@@ -581,7 +573,6 @@ new class extends Component
                     </div>
                 @endif
 
-                {{-- Add season form --}}
                 @if (! $editingSeasonId)
                 <div class="border-t border-thick border-hairline pt-4 space-y-4">
                     <flux:heading size="sm">{{ __('Add a season') }}</flux:heading>
@@ -593,9 +584,9 @@ new class extends Component
                             :current-rating="$seasonRating"
                         />
 
-                        <flux:button type="submit" variant="primary" class="w-full border-thick! border-hairline! shadow-cutout-sm!">
+                        <x-cutout-button type="submit" class="w-full">
                             {{ __('Add season') }}
-                        </flux:button>
+                        </x-cutout-button>
                     </form>
                 </div>
                 @endif

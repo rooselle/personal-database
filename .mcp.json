@@ -1,15 +1,19 @@
 {
-    "mcpServers": {
-        "laravel-boost": {
-            "command": "php",
-            "args": [
-                "artisan",
-                "boost:mcp"
-            ]
-        },
-        "claude_design": {
-            "type": "http",
-            "url": "https://api.anthropic.com/v1/design/mcp"
-        }
+  "mcpServers": {
+    "laravel-boost": {
+      "command": "php",
+      "args": [
+        "artisan",
+        "boost:mcp"
+      ]
+    },
+    "claude_design": {
+      "type": "http",
+      "url": "https://api.anthropic.com/v1/design/mcp"
+    },
+    "phpstorm": {
+      "url": "http://127.0.0.1:64442/stream",
+      "type": "http"
     }
+  }
 }

@@ -285,7 +285,7 @@ new class extends Component
                 <flux:input wire:model="finishedAt" :label="__('Date finished')" type="date" required />
 
                 <div class="space-y-3">
-                    <flux:select wire:model.live="rating" :label="__('Rating')">
+                    <flux:select wire:model.live="rating" :label="__('Rating')" required>
                         <flux:select.option value="1">★☆☆☆☆ — {{ __('I hated it') }}</flux:select.option>
                         <flux:select.option value="2">★★☆☆☆ — {{ __('I didn\'t like it') }}</flux:select.option>
                         <flux:select.option value="3">★★★☆☆ — {{ __('I didn\'t like it much') }}</flux:select.option>

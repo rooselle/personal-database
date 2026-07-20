@@ -299,15 +299,15 @@ new class extends Component
                     <flux:table.cell>
                         <div class="flex flex-wrap gap-1">
                             @foreach ($show->genres as $genre)
-                                <flux:badge size="sm" color="zinc">{{ $genre }}</flux:badge>
+                                <x-badge size="sm">{{ $genre }}</x-badge>
                             @endforeach
                         </div>
                     </flux:table.cell>
                     <flux:table.cell>
                         @if ($show->is_finished)
-                            <flux:badge color="zinc" class="bg-moss-100! text-moss-600! ring-moss-600/30!">{{ __('Finished') }}</flux:badge>
+                            <x-badge color="moss">{{ __('Finished') }}</x-badge>
                         @else
-                            <flux:badge color="lime" class="bg-mustard-100! text-mustard-600! ring-mustard-600/30!">{{ __('Ongoing') }}</flux:badge>
+                            <x-badge color="mustard">{{ __('Ongoing') }}</x-badge>
                         @endif
                     </flux:table.cell>
                     <flux:table.cell>
@@ -377,11 +377,11 @@ new class extends Component
                         <x-slot:badge>
                             @if ($show->is_finished)
                                 <span class="absolute top-2 right-2 drop-shadow">
-                                    <flux:badge size="sm" color="zinc" variant="solid" class="bg-moss-600! text-paper-fixed!">{{ __('Finished') }}</flux:badge>
+                                    <x-badge color="moss" size="sm">{{ __('Finished') }}</x-badge>
                                 </span>
                             @else
                                 <span class="absolute top-2 right-2 drop-shadow">
-                                    <flux:badge size="sm" color="lime" variant="solid" class="bg-mustard-500! text-ink-fixed!">{{ __('Ongoing') }}</flux:badge>
+                                    <x-badge color="mustard" size="sm">{{ __('Ongoing') }}</x-badge>
                                 </span>
                             @endif
                         </x-slot:badge>
@@ -518,11 +518,13 @@ new class extends Component
                                             <div class="flex items-center gap-2">
                                                 <span class="font-heading font-medium text-sm">{{ __('Season') }} {{ $season->season_number }}</span>
                                                 @if ($season->isFullyWatched())
-                                                    <flux:badge size="sm" color="lime" icon="check" class="bg-moss-100! text-moss-600! ring-moss-600/30!">{{ __('Watched') }}</flux:badge>
+                                                    <x-badge color="moss" size="sm">
+                                                        <flux:icon.check class="size-3" />{{ __('Watched') }}
+                                                    </x-badge>
                                                 @elseif ($season->watched_episodes > 0)
-                                                    <flux:badge size="sm" color="amber" class="bg-mustard-100! text-mustard-600! ring-mustard-600/30!">{{ __('In progress') }}</flux:badge>
+                                                    <x-badge color="mustard" size="sm">{{ __('In progress') }}</x-badge>
                                                 @else
-                                                    <flux:badge size="sm" color="zinc">{{ __('Not started') }}</flux:badge>
+                                                    <x-badge size="sm">{{ __('Not started') }}</x-badge>
                                                 @endif
                                             </div>
 

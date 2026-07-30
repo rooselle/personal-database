@@ -1,21 +1,21 @@
 # Personal Database
 
-Application personnelle pour archiver mes lectures et visionnages, construite avec Laravel, Livewire et Flux UI.
+Personal application to backup my reading and watching history, built with Laravel, Livewire and Flux UI.
 
-## Prérequis
+## Requirements
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) ou [Docker Engine](https://docs.docker.com/engine/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Docker Engine](https://docs.docker.com/engine/)
 
-## Installation (premier lancement)
+## Installation (first launch)
 
-### 1. Cloner le dépôt
+### 1. Clone the repository
 
 ```bash
 git clone <url>
 cd personal-database
 ```
 
-### 2. Installer les dépendances PHP via Docker
+### 2. Install PHP dependencies via Docker
 
 ```bash
 docker run --rm \
@@ -26,70 +26,70 @@ docker run --rm \
     composer install --ignore-platform-reqs
 ```
 
-### 3. Configurer l'environnement
+### 3. Configure the environment
 
 ```bash
 cp .env.example .env
 ```
 
-### 4. Construire et démarrer les conteneurs
+### 4. Build and start the containers
 
 ```bash
 ./vendor/bin/sail up -d
 ```
 
-La première exécution peut prendre quelques minutes (construction de l'image Docker).
+The first run may take a few minutes (building the Docker image).
 
-### 5. Initialiser l'application
+### 5. Initialize the application
 
 ```bash
 ./vendor/bin/sail composer run setup
 ```
 
-L'application est disponible sur **http://localhost**.
+The application is available at **http://localhost**.
 
 ---
 
-## Utilisation quotidienne
+## Daily usage
 
-**Démarrer les conteneurs :**
+**Start the containers:**
 ```bash
 ./vendor/bin/sail up -d
 ```
 
-**Lancer le serveur de développement** (Vite + queue worker + logs) :
+**Run the development server** (Vite + queue worker + logs):
 ```bash
 ./vendor/bin/sail composer run dev
 ```
 
-**Arrêter les conteneurs :**
+**Stop the containers:**
 ```bash
 ./vendor/bin/sail down
 ```
 
-**Commandes Artisan :**
+**Artisan commands:**
 ```bash
-./vendor/bin/sail artisan <commande>
+./vendor/bin/sail artisan <command>
 ```
 
-**Peupler la base avec des données de test :**
+**Seed the database with test data:**
 ```bash
 ./vendor/bin/sail artisan db:seed
 ```
 
-**Vider la base et recommencer le seed :**
+**Wipe the database and reseed:**
 ```bash
 ./vendor/bin/sail artisan migrate:fresh --seed
 ```
 
-**Tests :**
+**Tests:**
 ```bash
 ./vendor/bin/sail artisan test --compact
 ```
 
-**Alias pratique** (à ajouter dans `~/.zshrc` ou `~/.bashrc`) :
+**Handy alias** (add to `~/.zshrc` or `~/.bashrc`):
 ```bash
 alias sail='./vendor/bin/sail'
 ```
 
-Ensuite toutes les commandes peuvent s'écrire `sail up -d`, `sail artisan migrate`, etc.
+Then all commands can be written as `sail up -d`, `sail artisan migrate`, etc.
